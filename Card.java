@@ -1,14 +1,14 @@
 package video_poker;
 
 public class Card implements Comparable<Card>{
-
-	//Class variables
-	private int value;
-	private int suit;
 	
 	//Macros
 	private final static String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
-	private final static String[] suits = {"C","D","H","S"};
+	private final static String[] suits = {"S", "C", "D", "H"};
+		
+	//Class variables
+	private int value;
+	private int suit;
 	
 	
 	public Card(int val, int suit){
