@@ -9,13 +9,9 @@ public class Hand {
 	Card[] cards = new Card[handSize];
 	Card[] replace = new Card[handSize];
 	
-	
 	public Hand(Deck deck){
 		for(int i = 0; i < handSize; i++){
 			this.cards[i] = deck.drawCard();
-		}
-		
-		for(int i = 0; i < handSize; i++){
 			this.replace[i] = deck.drawCard();
 		}
 	}
