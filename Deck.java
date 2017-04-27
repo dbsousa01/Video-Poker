@@ -9,8 +9,8 @@ public class Deck {
 	int suitAmmount = 4;
 	
 	//Class variables
-	Card[] cards = new Card[numCards*suitAmmount];
-	int cardsOnDeck = 0;
+	private Card[] cards = new Card[numCards*suitAmmount];
+	private int cardsOnDeck = 0;
 	
 	
 	public Deck(){
