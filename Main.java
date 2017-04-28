@@ -1,5 +1,6 @@
 package video_poker;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
@@ -8,20 +9,36 @@ public class Main {
 
 		//Macros
 		int hasQuit = 3;
+		int maxBet = 5;
+		
+		//Auxiliary variables
+		int previousBet = maxBet;
+		int[] toDiscard;
+		int toHold;
 		
 		//Class variables
 		Deck deck = new Deck();
-		Hand hand;
-		int bet = 5;
-		int previousBet = bet;
+		Hand hand = new Hand(deck);
+		int bet = maxBet;
 		Scanner reader = new Scanner(System.in);
 		String[] userInput;
 		char input;
-		int credit = 0; //Check which arg is the credit
+		int credit = 0;
 		int state = 0; //to track the state of the game
+		
+		//Reading the args to see if the program was initialized correctly
+		//Initializing the credit variable with the amount requested by the player
+		if(args.length != 1){
+			System.out.println("Not enough arguments\nUsage: -i"); //Falta uma cena antes do -i... não sei correr programas T-T
+			System.exit(-1);
+		}else{
+			credit = Integer.parseInt(args[0]);
+		}
+		
 		/************************************
 		 * ??(TO BE DISCUSSED WITH GROUP.	*
 		 * Particularly statistics)			*
+		 * 									*
 		 * Possible states of the game:		*
 		 * 0 - You haven't bet yet.			*
 		 * 	   possible plays:				*
@@ -43,12 +60,6 @@ public class Main {
 		 * 		-statistics					*
 		 ************************************/
 		
-		//At the beginning we need to shuffle the deck
-		deck.shuffle();
-		
-		//now we create the initial player's hand and the 5 replacement cards,
-		//that will be used to replace the cards chosen by the player.
-		hand = new Hand(deck);
 		
 		/********************************************************************************************************
 		*Starting the interface with the player.																*
@@ -72,10 +83,25 @@ public class Main {
 		*q - Quit the game													*
 		********************************************************************************************************/
 		
-		System.out.println("What will you do?");
 		
+		//The program is a cycle that only ends when the player quits. ??Maybe also end when the player has no credits left.
 		while(state != hasQuit){
-
+			
+			if(state == 0){
+				//For each new play, we need to open a new deck
+				//Then we need to shuffle the deck
+				deck = new Deck();
+				deck.shuffle();
+				
+				//now we create the initial player's hand and the 5 replacement cards,
+				//that will be used to replace the cards chosen by the player.
+				hand = new Hand(deck);	
+			}			
+			
+			
+			System.out.println("What will you do?");
+			
+			//Showing the player messages to guide him through the game
 			System.out.println("[$] credit");
 			
 			if(state == 0){
@@ -115,7 +141,7 @@ public class Main {
 						if(userInput.length > 2){
 							System.out.println("Please, chose only one value to bet: [b i]");
 							break;
-						}else if(userInput.length > 1){
+						}else if(userInput.length == 2){
 							bet = Integer.parseInt(userInput[1]);
 							if(bet < 1 || bet > 5){
 								System.out.println("Invalid bet, please choose a proper value [1 - 5].");
@@ -127,47 +153,76 @@ public class Main {
 									System.out.println(previousBet);
 								}else{
 									System.out.println("Not enough credits.");
+									break;
 								}
 							}
 						}
-						
+						credit -= bet;
 						state = 1;
 						System.out.println("You bet " + bet);
 					}else{
 						System.out.println("You can't bet right now.");
 					}
-					
 					break;
 					
 				case '$':
-					System.out.println("Your credit is: " + credit);
+					System.out.println("Your credit is " + credit);
 					break;
 					
 				case 'd':
-					System.out.println(hand);
-					state = 2;
+					if(state == 1){
+						System.out.println(hand);
+						state = 2;
+					}else{
+						System.out.println("You can't deal cards right now");
+					}
 					break;
 					
 				case 'h':
 					if(state == 2){
+						//Creating the toDiscard array that will be used for the "hold" function
+						toDiscard = new int[hand.length()];
+						Arrays.fill(toDiscard, 1);
+						
 						if(userInput.length > 6){
-							System.out.println("How many cards are you trying to hols? You can only hold 5 cards (max)");
+							System.out.println("How many cards are you trying to replace? You can only choose 5 cards (max).");
+							break;
 						}else{
-							for(String aux : userInput){
-								bet = Integer.parseInt(aux);
-								if(bet < 1 || bet > 5){
-									System.out.println("You chose an invalid card. please try again.");
-									break;
-								}else{
-									
+							for(String aux: userInput){
+								System.out.println(aux);
+								if(!aux.equals("h")){
+									toHold = Integer.parseInt(aux);
+									if(toHold >= 1 && toHold <= 5){
+										toDiscard[toHold - 1] = 0;
+									}else{
+										System.out.println("Invalid value, please choose cards from those in hand [1 - 5].");
+										state = 3;
+										break;
+									}
 								}
 							}
+							
+							if(state == 3){
+								state = 2;
+								break;
+							}
+							
 						}
 						
+					}else{
+						System.out.println("You haven't even seen your hand yet... How can you know what to hold?");
+						break;
 					}
 					
+					for(int i = 0; i < toDiscard.length; i++){
+						if(toDiscard[i] == 1){
+							hand.replace(i);
+						}
+					}
 					
+					//??Insert comparisons to check if player won anything.
 					
+					System.out.println(hand);
 					state = 0;
 					break;
 					
@@ -180,6 +235,7 @@ public class Main {
 					break;
 					
 				case 'q':
+					//??Have to change so it's only possible to quit when state = 0
 					state = hasQuit;
 					System.out.println("Thank you for playing!");
 					break;
