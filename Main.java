@@ -111,16 +111,23 @@ public class Main {
 				case 'b':
 					//??TO DO: what happens when you try to bet more than your credit?
 					if(state == 0){
-						//Change the value of the bet. if there is no value, the bet keeps its previews value.
-						if(userInput.length > 1){
+						//Change the value of the bet. if there is no value, the bet keeps its previous value.
+						if(userInput.length > 2){
+							System.out.println("Please, chose only one value to bet: [b i]");
+							break;
+						}else if(userInput.length > 1){
 							bet = Integer.parseInt(userInput[1]);
 							if(bet < 1 || bet > 5){
 								System.out.println("Invalid bet, please choose a proper value [1 - 5].");
 								bet = previousBet;
 								break;
 							}else{
-								previousBet = bet;
-								System.out.println(previousBet);
+								if(bet <= credit){
+									previousBet = bet;
+									System.out.println(previousBet);
+								}else{
+									System.out.println("Not enough credits.");
+								}
 							}
 						}
 						
@@ -142,7 +149,26 @@ public class Main {
 					break;
 					
 				case 'h':
+					if(state == 2){
+						if(userInput.length > 6){
+							System.out.println("How many cards are you trying to hols? You can only hold 5 cards (max)");
+						}else{
+							for(String aux : userInput){
+								bet = Integer.parseInt(aux);
+								if(bet < 1 || bet > 5){
+									System.out.println("You chose an invalid card. please try again.");
+									break;
+								}else{
+									
+								}
+							}
+						}
+						
+					}
 					
+					
+					
+					state = 0;
 					break;
 					
 				case 'a':
