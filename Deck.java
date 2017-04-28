@@ -6,16 +6,16 @@ public class Deck {
 	
 	//Macros
 	int numCards = 13;
-	int suitAmmount = 4;
+	int suitAmount = 4;
 	
 	//Class variables
-	Card[] cards = new Card[numCards*suitAmmount];
-	int cardsOnDeck = 0;
+	private Card[] cards = new Card[numCards*suitAmount];
+	private int cardsOnDeck = 0;
 	
 	
 	public Deck(){
 		for(int i = 0; i < numCards; i++){
-			for(int j = 0; j < suitAmmount; j++){
+			for(int j = 0; j < suitAmount; j++){
 				this.cards[cardsOnDeck] = new Card(i, j);
 				cardsOnDeck++;
 			}
@@ -32,13 +32,13 @@ public class Deck {
 		Card temp;
 		
 		//shuffle the deck by switching the place of 2 random cards 1000 times
-		for(int i = 0; i < numCards*suitAmmount*100; i++){
-			pos1 = rand1.nextInt(numCards*suitAmmount);
-			pos2 = rand2.nextInt(numCards*suitAmmount);
+		for(int i = 0; i < numCards*suitAmount*100; i++){
+			pos1 = rand1.nextInt(numCards*suitAmount);
+			pos2 = rand2.nextInt(numCards*suitAmount);
 			
 			while(true){
 				if(pos1 == pos2){
-					pos2 = rand2.nextInt(numCards*suitAmmount);
+					pos2 = rand2.nextInt(numCards*suitAmount);
 				}else{
 					break;
 				}
@@ -49,6 +49,7 @@ public class Deck {
 			this.cards[pos2] = temp;
 		}
 	}
+	
 	
 	public Card drawCard(){
 		int top = this.cardsOnDeck - 1;
