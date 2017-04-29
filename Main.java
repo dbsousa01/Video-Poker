@@ -24,19 +24,31 @@ public class Main {
 		Scanner reader = new Scanner(System.in);
 		String[] userInput;
 		char input;
-		int credit = 0;
+		String cmd_file, card_file;
+		int credit=0;
+		int nbdeals;
 		int state = 0; //to track the state of the game
 
 		
-		//Reading the args to see if the program was initialized correctly
+		//Reading the arguments to see if the program was initialized correctly
 		//Initializing the credit variable with the amount requested by the player
-		if(args.length != 1){
-			System.out.println("Not enough arguments\nUsage: -i"); //Falta uma cena antes do -i... não sei correr programas T-T
-			System.exit(-1);
+		if(args[0].equals("-i")){
+			credit = Integer.parseInt(args[1]);
+			//Tirar isto na versão final
+			System.out.println("You chose the interactive mode with "+ credit +" credit");
+		}else if(args[0].equals("-d")){
+			credit = Integer.parseInt(args[1]);
+			cmd_file = args[2];
+			card_file = args[3];
+			System.out.println("You chose the debug mode. Loading game...");
+		}else if(args[0].equals("-s")){
+			credit = Integer.parseInt(args[1]);
+			bet = Integer.parseInt(args[2]);
+			nbdeals = Integer.parseInt(args[3]);
 		}else{
-			credit = Integer.parseInt(args[0]);
+			System.out.println("Not enough arguments\nUsage: -i or -d (file) or -s"); //Falta uma cena antes do -i... não sei correr programas T-T
+			System.exit(-1);
 		}
-		
 		/************************************
 		 * ??(TO BE DISCUSSED WITH GROUP.	*
 		 * Particularly statistics)			*
@@ -138,11 +150,10 @@ public class Main {
 			//After getting input, we process it
 			switch(input){
 			case 'b':
-				//??TO DO: what happens when you try to bet more than your credit?
 				if(state == 0){
 					//Change the value of the bet. if there is no value, the bet keeps its previous value.
 					if(userInput.length > 2){
-						System.out.println("Please, chose only one value to bet: [b i]");
+						System.out.println("Please, choose only one value to bet: [b i]\n Try Again");
 						break;
 					}else if(userInput.length == 2){
 						bet = Integer.parseInt(userInput[1]);
@@ -155,8 +166,8 @@ public class Main {
 								previousBet = bet;
 								System.out.println(previousBet);
 							}else{
-								System.out.println("Not enough credits.");
-								break;
+								System.out.println("Not enough credits. Betting what you have");
+								bet = credit;
 							}
 						}
 					}
@@ -187,20 +198,15 @@ public class Main {
 					toDiscard = new int[hand.length()];
 					Arrays.fill(toDiscard, 1);
 					
-					if(userInput.length > handSize + 1){
-						System.out.println("How many cards are you trying to replace? You can only choose 5 cards (max).");
-						break;
-					}else{
-						for(String aux: userInput){
-							if(!aux.equals("h")){
-								toHold = Integer.parseInt(aux);
-								if(toHold >= 1 && toHold <= 5){
-									toDiscard[toHold - 1] = 0;
-								}else{
-									System.out.println("Invalid value, please choose cards from those in hand [1 - 5].");
-									state = 3;
-									break;
-								}
+					for(String aux: userInput){
+						if(!aux.equals("h")){
+							toHold = Integer.parseInt(aux);
+							if(toHold >= 1 && toHold <= 5){
+								toDiscard[toHold - 1] = 0;
+							}else{
+								System.out.println("Invalid value, please choose cards from those in hand [1 - 5].");
+								state = 3;
+								break;
 							}
 						}
 						
@@ -255,7 +261,6 @@ public class Main {
 		
 		//We need to close the reader at the end.
 		reader.close();
-		
 	}
 
 }

@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 public class Hand {
 
-	
 	//Class variables
 	private Card[] cards;
 	private Card[] replacement;
@@ -19,13 +18,9 @@ public class Hand {
 		
 		for(int i = 0; i < handSize; i++){
 			this.cards[i] = deck.drawCard();
-		}
-		
-		for(int i = 0; i < handSize; i++){
 			this.replacement[i] = deck.drawCard();
 		}
 	}
-	
 	
 	@Override
 	public String toString() {
@@ -38,12 +33,10 @@ public class Hand {
 		return aux;
 	}
 	
-	
 	public int length(){
 		
 		return handSize;
 	}
-	
 	
 	public void replace(int index){
 		
@@ -54,26 +47,13 @@ public class Hand {
 		}
 	}
 	
-	
 	public void sort(){
 		
 		Arrays.sort(this.cards);
 	}
 	
-	
-	
-	
 	public boolean isCombination(){
 		
 		return false;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }
