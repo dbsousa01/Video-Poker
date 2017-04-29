@@ -189,7 +189,7 @@ public class Main {
 					System.out.println(hand);
 					state = 2;
 				}else{
-					System.out.println("You can't deal cards right now");
+					System.out.println("d : illegal command");
 				}
 				break;
 				
@@ -217,7 +217,7 @@ public class Main {
 						}
 					}
 				}else{
-					System.out.println("You haven't even seen your hand yet... How can you know what to hold?");
+					System.out.println("h: ilegal command");
 					break;
 				}
 				
@@ -256,7 +256,7 @@ public class Main {
 				break;
 				
 			default:
-				System.out.println("Invalid command. Please choose from the list:");
+				System.out.println(input +": illegal command. Available options:");
 			}
 		}
 		
