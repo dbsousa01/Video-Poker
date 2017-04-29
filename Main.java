@@ -226,12 +226,12 @@ public class Main {
 					}
 				}
 				hand.sort();
-				
 
+				System.out.println("player's hand " + hand);
 				if(hand.isCombination()){
 					System.out.println("You won with a " + hand + " and now your credit is " + credit + "!");
 				}else{
-					System.out.println("You lost and now your credit is " + credit + ".");
+					System.out.println("You lost and your credit is " + credit + ".");
 				}
 				
 				state = 0;
@@ -250,7 +250,7 @@ public class Main {
 					state = hasQuit;
 					System.out.println("Thank you for playing!");
 				}else{
-					System.out.println("You can't quit now. You're locked here with me.");
+					System.out.println("You can't quit now. You're locked here with me. :) ");
 				}
 				break;
 				
