@@ -8,7 +8,35 @@ public class InteractiveMode extends GameMode {
 		super(args);
 		// TODO Auto-generated constructor stub
 	}
-	
+	public void bet(){
+		if(state == 0){
+			//Change the value of the bet. if there is no value, the bet keeps its previous value.
+			if(userInput.length > 2){
+				System.out.println("Please, choose only one value to bet: [b i]\n Try Again");
+				return;
+			}else if(userInput.length == 2){
+				bet = Integer.parseInt(userInput[1]);
+				if(bet < 1 || bet > 5){
+					System.out.println("Invalid bet, please choose a proper value [1 - 5].");
+					bet = previousBet;
+					return;
+				}else{
+					if(bet <= credit){
+						previousBet = bet;
+						System.out.println(previousBet);
+					}else{
+						System.out.println("Not enough credits. Betting what you have");
+						bet = credit;
+					}
+				}
+			}
+			credit -= bet;
+			state = 1;
+			System.out.println("You bet " + bet);
+		}else{
+			System.out.println("You can't bet right now.");
+		}
+	}
 	public void interactive(){
 		System.out.println("You chose the interactive mode with "+credit+ "credit");
 		//The program is a cycle that only ends when the player quits. ??Maybe also end when the player has no credits left.
@@ -25,7 +53,6 @@ public class InteractiveMode extends GameMode {
 						hand = new Hand(deck, handSize);
 						hand.sort();
 					}			
-					
 					
 					System.out.println("What will you do?");
 					
@@ -61,37 +88,11 @@ public class InteractiveMode extends GameMode {
 					//After getting input, we process it
 					switch(input){
 					case 'b':
-						if(state == 0){
-							//Change the value of the bet. if there is no value, the bet keeps its previous value.
-							if(userInput.length > 2){
-								System.out.println("Please, choose only one value to bet: [b i]\n Try Again");
-								break;
-							}else if(userInput.length == 2){
-								bet = Integer.parseInt(userInput[1]);
-								if(bet < 1 || bet > 5){
-									System.out.println("Invalid bet, please choose a proper value [1 - 5].");
-									bet = previousBet;
-									break;
-								}else{
-									if(bet <= credit){
-										previousBet = bet;
-										System.out.println(previousBet);
-									}else{
-										System.out.println("Not enough credits. Betting what you have");
-										bet = credit;
-									}
-								}
-							}
-							credit -= bet;
-							state = 1;
-							System.out.println("You bet " + bet);
-						}else{
-							System.out.println("You can't bet right now.");
-						}
+						bet();
 						break;
 						
 					case '$':
-						System.out.println("Your credit is " + credit);
+						Show_credit();
 						break;
 						
 					case 'd':

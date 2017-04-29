@@ -32,7 +32,9 @@ public abstract class GameMode {
 		credit = Integer.parseInt(args[1]);
 		// TODO Auto-generated constructor stub
 	}
-	
+	public void Show_credit(){
+		System.out.println("Your credit is " + credit);
+	}
 	public void runner(String[] args,int opt){
 		if(opt==1){
 			mode1 = new InteractiveMode(args);
