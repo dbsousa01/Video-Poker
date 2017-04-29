@@ -229,11 +229,11 @@ public class Main {
 
 				System.out.println("player's hand " + hand);
 				if(hand.isCombination()){
+					//should print the type of hand he won with, not the cards itself
 					System.out.println("You won with a " + hand + " and now your credit is " + credit + "!");
 				}else{
 					System.out.println("You lost and your credit is " + credit + ".");
 				}
-				
 				state = 0;
 				break;
 				
