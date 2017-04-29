@@ -45,6 +45,7 @@ public class Main {
 			credit = Integer.parseInt(args[1]);
 			bet = Integer.parseInt(args[2]);
 			nbdeals = Integer.parseInt(args[3]);
+			System.out.println("You chose the simulation mode");
 		}else{
 			System.out.println("Not enough arguments\nUsage: -i or -d (file) or -s"); //Falta uma cena antes do -i... não sei correr programas T-T
 			System.exit(-1);
