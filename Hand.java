@@ -79,9 +79,17 @@ public class Hand {
 	}
 	
 	
+	//Method to create a rigged hand
+	public void rigHand(int[] vals, int[] suits){
+		
+		for(int i = 0; i < handSize; i++){
+			this.cards[i] = new Card(vals[i], suits[i]);
+		}
+	}
+	
 	public int isCombination(){
 		
-		
+		//Check if the hand has a straight
 		
 		
 		//Check if the hand has a pair
