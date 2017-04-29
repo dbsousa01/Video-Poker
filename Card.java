@@ -18,15 +18,15 @@ public class Card implements Comparable<Card>{
 	}
 	
 	
-	public int getSuit(Card a){
+	public int getSuit(){
 		
-		return a.suit;
+		return this.suit;
 	}
 	
 	
-	public int getValue(Card a){
+	public int getValue(){
 		
-		return a.value;
+		return this.value;
 	}
 
 
@@ -37,7 +37,7 @@ public class Card implements Comparable<Card>{
 	}
 	
 	
-	//Necessary to implement Comparable<T>
+	//Necessary when implementing Comparable<T>
 	public int compareTo(Card other){
 		
 		if(this.value > other.value){

@@ -10,6 +10,7 @@ public class Main {
 		//Macros
 		int hasQuit = 3;
 		int maxBet = 5;
+		int handSize = 5;
 		
 		//Auxiliary variables
 		int previousBet = maxBet;
@@ -18,13 +19,14 @@ public class Main {
 		
 		//Class variables
 		Deck deck = new Deck();
-		Hand hand = new Hand(deck);
+		Hand hand = new Hand(deck, handSize);
 		int bet = maxBet;
 		Scanner reader = new Scanner(System.in);
 		String[] userInput;
 		char input;
 		int credit = 0;
 		int state = 0; //to track the state of the game
+
 		
 		//Reading the args to see if the program was initialized correctly
 		//Initializing the credit variable with the amount requested by the player
@@ -95,7 +97,8 @@ public class Main {
 				
 				//now we create the initial player's hand and the 5 replacement cards,
 				//that will be used to replace the cards chosen by the player.
-				hand = new Hand(deck);	
+				hand = new Hand(deck, handSize);
+				hand.sort();
 			}			
 			
 			
@@ -134,118 +137,124 @@ public class Main {
 
 			//After getting input, we process it
 			switch(input){
-				case 'b':
-					//??TO DO: what happens when you try to bet more than your credit?
-					if(state == 0){
-						//Change the value of the bet. if there is no value, the bet keeps its previous value.
-						if(userInput.length > 2){
-							System.out.println("Please, chose only one value to bet: [b i]");
+			case 'b':
+				//??TO DO: what happens when you try to bet more than your credit?
+				if(state == 0){
+					//Change the value of the bet. if there is no value, the bet keeps its previous value.
+					if(userInput.length > 2){
+						System.out.println("Please, chose only one value to bet: [b i]");
+						break;
+					}else if(userInput.length == 2){
+						bet = Integer.parseInt(userInput[1]);
+						if(bet < 1 || bet > 5){
+							System.out.println("Invalid bet, please choose a proper value [1 - 5].");
+							bet = previousBet;
 							break;
-						}else if(userInput.length == 2){
-							bet = Integer.parseInt(userInput[1]);
-							if(bet < 1 || bet > 5){
-								System.out.println("Invalid bet, please choose a proper value [1 - 5].");
-								bet = previousBet;
-								break;
+						}else{
+							if(bet <= credit){
+								previousBet = bet;
+								System.out.println(previousBet);
 							}else{
-								if(bet <= credit){
-									previousBet = bet;
-									System.out.println(previousBet);
+								System.out.println("Not enough credits.");
+								break;
+							}
+						}
+					}
+					credit -= bet;
+					state = 1;
+					System.out.println("You bet " + bet);
+				}else{
+					System.out.println("You can't bet right now.");
+				}
+				break;
+				
+			case '$':
+				System.out.println("Your credit is " + credit);
+				break;
+				
+			case 'd':
+				if(state == 1){
+					System.out.println(hand);
+					state = 2;
+				}else{
+					System.out.println("You can't deal cards right now");
+				}
+				break;
+				
+			case 'h':
+				if(state == 2){
+					//Creating the toDiscard array that will be used for the "hold" function
+					toDiscard = new int[hand.length()];
+					Arrays.fill(toDiscard, 1);
+					
+					if(userInput.length > handSize + 1){
+						System.out.println("How many cards are you trying to replace? You can only choose 5 cards (max).");
+						break;
+					}else{
+						for(String aux: userInput){
+							if(!aux.equals("h")){
+								toHold = Integer.parseInt(aux);
+								if(toHold >= 1 && toHold <= 5){
+									toDiscard[toHold - 1] = 0;
 								}else{
-									System.out.println("Not enough credits.");
+									System.out.println("Invalid value, please choose cards from those in hand [1 - 5].");
+									state = 3;
 									break;
 								}
 							}
 						}
-						credit -= bet;
-						state = 1;
-						System.out.println("You bet " + bet);
-					}else{
-						System.out.println("You can't bet right now.");
-					}
-					break;
-					
-				case '$':
-					System.out.println("Your credit is " + credit);
-					break;
-					
-				case 'd':
-					if(state == 1){
-						System.out.println(hand);
-						state = 2;
-					}else{
-						System.out.println("You can't deal cards right now");
-					}
-					break;
-					
-				case 'h':
-					if(state == 2){
-						//Creating the toDiscard array that will be used for the "hold" function
-						toDiscard = new int[hand.length()];
-						Arrays.fill(toDiscard, 1);
 						
-						if(userInput.length > 6){
-							System.out.println("How many cards are you trying to replace? You can only choose 5 cards (max).");
+						if(state == 3){
+							state = 2;
 							break;
-						}else{
-							for(String aux: userInput){
-								System.out.println(aux);
-								if(!aux.equals("h")){
-									toHold = Integer.parseInt(aux);
-									if(toHold >= 1 && toHold <= 5){
-										toDiscard[toHold - 1] = 0;
-									}else{
-										System.out.println("Invalid value, please choose cards from those in hand [1 - 5].");
-										state = 3;
-										break;
-									}
-								}
-							}
-							
-							if(state == 3){
-								state = 2;
-								break;
-							}
-							
-						}
-						
-					}else{
-						System.out.println("You haven't even seen your hand yet... How can you know what to hold?");
-						break;
-					}
-					
-					for(int i = 0; i < toDiscard.length; i++){
-						if(toDiscard[i] == 1){
-							hand.replace(i);
 						}
 					}
-					
-					//??Insert comparisons to check if player won anything.
-					
-					System.out.println(hand);
-					state = 0;
+				}else{
+					System.out.println("You haven't even seen your hand yet... How can you know what to hold?");
 					break;
-					
-				case 'a':
-					
-					break;
-					
-				case 's':
-					
-					break;
-					
-				case 'q':
-					//??Have to change so it's only possible to quit when state = 0
+				}
+				
+				for(int i = 0; i < toDiscard.length; i++){
+					if(toDiscard[i] == 1){
+						hand.replace(i);
+					}
+				}
+				hand.sort();
+				
+
+				if(hand.isCombination()){
+					System.out.println("You won with a " + hand + " and now your credit is " + credit + "!");
+				}else{
+					System.out.println("You lost and now your credit is " + credit + ".");
+				}
+				
+				state = 0;
+				break;
+				
+			case 'a':
+				
+				break;
+				
+			case 's':
+				
+				break;
+				
+			case 'q':
+				if(state == 0){
 					state = hasQuit;
 					System.out.println("Thank you for playing!");
-					break;
-					
-				default:
-					System.out.println("Invalid command. Please choose from the list:");
+				}else{
+					System.out.println("You can't quit now. You're locked here with me.");
+				}
+				break;
+				
+			default:
+				System.out.println("Invalid command. Please choose from the list:");
 			}
 		}
-		//We need to close the reader, or it won't stop reading.
-		//reader.close();;
+		
+		//We need to close the reader at the end.
+		reader.close();
 		
 	}
 

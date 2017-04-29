@@ -1,22 +1,28 @@
 package video_poker;
 
+
+import java.util.Arrays;
+
 public class Hand {
 
-	//Macros
-	int handSize = 5;
 	
 	//Class variables
-	Card[] cards = new Card[handSize];
-	Card[] replace = new Card[handSize];
+	private Card[] cards;
+	private Card[] replacement;
+	int handSize;
 	
 	
-	public Hand(Deck deck){
+	public Hand(Deck deck, int size){
+		this.handSize = size;
+		this.cards = new Card[handSize];
+		this.replacement = new Card[handSize];
+		
 		for(int i = 0; i < handSize; i++){
 			this.cards[i] = deck.drawCard();
 		}
 		
 		for(int i = 0; i < handSize; i++){
-			this.replace[i] = deck.drawCard();
+			this.replacement[i] = deck.drawCard();
 		}
 	}
 	
@@ -31,6 +37,38 @@ public class Hand {
 		
 		return aux;
 	}
+	
+	
+	public int length(){
+		
+		return handSize;
+	}
+	
+	
+	public void replace(int index){
+		
+		if(index > handSize){
+			System.out.println("Card out of range. The hand only has " + handSize);
+		}else{
+			cards[index] = replacement[index];
+		}
+	}
+	
+	
+	public void sort(){
+		
+		Arrays.sort(this.cards);
+	}
+	
+	
+	
+	
+	public boolean isCombination(){
+		
+		return false;
+	}
+	
+	
 	
 	
 	
