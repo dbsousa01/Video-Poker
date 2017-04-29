@@ -96,4 +96,12 @@ public class Hand {
 		}
 		return 0;
 	}
+	
+	public void rigHand(int[] vals, int[] suits){
+		
+		for(int i =0; i< handSize;i++){
+			this.cards[i] = new Card(vals[i], suits[i]);
+		}
+		return;
+	}
 }
