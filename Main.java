@@ -34,7 +34,7 @@ public class Main {
 		//Initializing the credit variable with the amount requested by the player
 		if(args[0].equals("-i")){
 			credit = Integer.parseInt(args[1]);
-			//Tirar isto na versão final
+			//Tirar estes prints todos na versão final
 			System.out.println("You chose the interactive mode with "+ credit +" credit");
 		}else if(args[0].equals("-d")){
 			credit = Integer.parseInt(args[1]);
@@ -143,7 +143,7 @@ public class Main {
 			if(userInput[0].length() == 1){
 				input = userInput[0].charAt(0);
 			}else{
-				System.out.println("Invalid command, please choose from the list.");
+				System.out.println(userInput[0] + ": illegal command, please choose from the list.");
 				continue;
 			}
 			
