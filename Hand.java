@@ -61,11 +61,41 @@ public class Hand {
 	}
 	
 	
-	
-	
-	public boolean isCombination(){
+	public boolean isPair(){
+		
+		for(int i = 0; i < this.handSize-1; i++){
+			for(int j = i; j < this.handSize-1; i++){
+				if(this.cards[i].getValue() == 0 || this.cards[i].getValue() > 9){
+					if(this.cards[i].equals(this.cards[j]) ){
+						return true;
+					}else{
+						continue;
+					}
+				}
+			}
+		}
 		
 		return false;
+	}
+	
+	
+	public int isCombination(){
+		
+		
+		
+		
+		//Check if the hand has a pair
+		for(int i = 0; i < this.handSize-2; i++){
+			for(int j = i + 1; j < this.handSize-1; j++){
+				if(this.cards[i].getValue() == 0 || this.cards[i].getValue() > 9){
+					if(this.cards[i].compareTo(this.cards[j]) == 0){
+						return 1;
+					}
+				}
+			}
+		}
+		
+		return 0;
 	}
 	
 	
