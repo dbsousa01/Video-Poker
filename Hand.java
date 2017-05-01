@@ -212,7 +212,7 @@ public class Hand {
 		value = this.checkOcurrence(1); //Checks for Triples
 		if(value !=0)
 			return value;
-		value = this.isNPair();
+		value = this.isNPair();//Checks for a 2Pair and a J or + pair
 		if(value !=0)
 			return value;
 		return 0;
