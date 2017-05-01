@@ -29,13 +29,21 @@ public class Card implements Comparable<Card>{
 		return this.value;
 	}
 
-
+	
 	@Override
 	public String toString() {
 		
 		return values[value] + suits[suit];
 	}
 	
+	public boolean compareSuit(Card card){
+		
+		if(this.getSuit() == card.getSuit()){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	
 	//Necessary when implementing Comparable<T>
 	public int compareTo(Card other){
@@ -48,6 +56,5 @@ public class Card implements Comparable<Card>{
 			return 0;
 		}	
 	}
-		
 	
 }

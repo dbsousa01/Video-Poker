@@ -30,11 +30,11 @@ public class Main {
 		
 		//Reading the args to see if the program was initialized correctly
 		//Initializing the credit variable with the amount requested by the player
-		if(args.length != 1){
-			System.out.println("Not enough arguments\nUsage: -i"); //Falta uma cena antes do -i... não sei correr programas T-T
+		if(args.length < 2){
+			System.out.println("Not enough arguments\nUsage: -i credit"); //Falta uma cena antes do -i... não sei correr programas T-T
 			System.exit(-1);
 		}else{
-			credit = Integer.parseInt(args[0]);
+			credit = Integer.parseInt(args[1]);
 		}
 		
 		/************************************
@@ -153,13 +153,20 @@ public class Main {
 						}else{
 							if(bet <= credit){
 								previousBet = bet;
-								System.out.println(previousBet);
 							}else{
 								System.out.println("Not enough credits.");
 								break;
 							}
 						}
+					}else{
+						if(bet <= credit){
+							previousBet = bet;
+						}else{
+							System.out.println("Not enough credits.");
+							break;
+						}
 					}
+					
 					credit -= bet;
 					state = 1;
 					System.out.println("You bet " + bet);
@@ -187,10 +194,11 @@ public class Main {
 					toDiscard = new int[hand.length()];
 					Arrays.fill(toDiscard, 1);
 					
-					if(userInput.length > handSize + 1){
-						System.out.println("How many cards are you trying to replace? You can only choose 5 cards (max).");
-						break;
-					}else{
+					//Uncomment this if amount of cards the player tries to hold is important
+					//if(userInput.length > handSize + 1){
+					//	System.out.println("How many cards are you trying to replace? You can only choose 5 cards (max).");
+					//	break;
+					//}else{
 						for(String aux: userInput){
 							if(!aux.equals("h")){
 								toHold = Integer.parseInt(aux);
@@ -208,7 +216,7 @@ public class Main {
 							state = 2;
 							break;
 						}
-					}
+					//}
 				}else{
 					System.out.println("You haven't even seen your hand yet... How can you know what to hold?");
 					break;
@@ -219,13 +227,50 @@ public class Main {
 						hand.replace(i);
 					}
 				}
-				hand.sort();
-				
 
-				if(hand.isCombination()){
-					System.out.println("You won with a " + hand + " and now your credit is " + credit + "!");
-				}else{
+				//hand.rigHand(new int[]{0, 9, 10, 11, 12}, new int[]{0, 0, 0, 0, 0});
+				
+				hand.sort();
+				System.out.println(hand);
+				int handVal = hand.isCombination();
+				
+				
+				if(handVal == 0){
+					
 					System.out.println("You lost and now your credit is " + credit + ".");
+				}else if(handVal == 1){
+					
+					System.out.println("You won with a pair and now your credit is " + credit + "!");
+				}else if(handVal == 2){
+					
+					System.out.println("You won with two pairs and now your credit is " + credit + "!");
+				}else if(handVal == 3){
+					
+					System.out.println("You won with a trio and now your credit is " + credit + "!");
+				}else if(handVal == 4){
+					
+					System.out.println("You won with a straight and now your credit is " + credit + "!");
+				}else if(handVal == 5){
+					
+					System.out.println("You won with a flush and now your credit is " + credit + "!");
+				}else if(handVal == 6){
+					
+					System.out.println("You won with a full house and now your credit is " + credit + "!");
+				}else if(handVal == 7){
+					
+					System.out.println("You won with four of a kind and now your credit is " + credit + "!");
+				}else if(handVal == 8){
+					
+					System.out.println("You won with four of a kind and now your credit is " + credit + "!");
+				}else if(handVal == 9){
+					
+					System.out.println("You won with four aces and now your credit is " + credit + "!");
+				}else if(handVal == 10){
+					
+					System.out.println("You won with a straight flush and now your credit is " + credit + "!");
+				}else if(handVal == 11){
+					
+					System.out.println("You won with a royal flush and now your credit is " + credit + "!");
 				}
 				
 				state = 0;
