@@ -114,7 +114,7 @@ public class InteractiveMode extends GameMode {
 								hand.replace(i);
 							}
 						}
-						hand.rigHand(new int[]{10, 1, 0, 8, 0}, new int[]{0, 2, 2, 1, 3});
+						hand.rigHand(new int[]{10, 1, 5, 8, 0}, new int[]{0, 2, 2, 1, 3});
 						hand.sort();
 						System.out.println("player's hand " + hand);
 						switch( hand.isCombination() ){

@@ -187,7 +187,8 @@ public class Hand {
 		}
 		if(counter.equals(2))
 			return 2;
-		else if(value.equals(Card.JACK)||value.equals(Card.QUEEN)||value.equals(Card.KING)||value.equals(Card.ACE)){
+		else if(counter.equals(1)&&(value.equals(Card.JACK)||value.equals(Card.QUEEN)||value.equals(Card.KING)||
+				value.equals(Card.ACE))){
 			//Only one pair but Jacks or Higher
 			return 1;
 		}
