@@ -1,4 +1,4 @@
-package video_poker;
+package group18;
 
 import java.util.Scanner;
 
@@ -29,8 +29,12 @@ public abstract class GameMode {
 	Scanner reader = new Scanner(System.in);
 	
 	public GameMode(String[] args) {
-		credit = Integer.parseInt(args[1]);
-		// TODO Auto-generated constructor stub
+		try{
+			credit = Integer.parseInt(args[1]);
+		}catch(NumberFormatException ex){
+			System.out.println("Wrong input, exiting");
+			System.exit(1);
+		}
 	}
 	public void Show_credit(){
 		System.out.println("Your credit is " + credit);

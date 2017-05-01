@@ -1,4 +1,4 @@
-package video_poker;
+package group18;
 
 public class DebugMode extends GameMode{
 	String cmd_file;

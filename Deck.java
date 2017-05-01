@@ -1,4 +1,4 @@
-package video_poker;
+package group18;
 
 import java.util.Random;
 

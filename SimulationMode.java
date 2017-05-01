@@ -1,4 +1,4 @@
-package video_poker;
+package group18;
 
 public class SimulationMode extends GameMode{
 	int bet;
