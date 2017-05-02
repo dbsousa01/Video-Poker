@@ -31,7 +31,10 @@ public abstract class GameMode {
 	Scanner reader = new Scanner(System.in);
 	
 	public GameMode(String[] args) {
-		
+		if(args.length < 2){
+			System.out.println("Not enough arguments");
+			System.exit(0);
+		}
 		try{
 			credit = Integer.parseInt(args[1]);
 		}catch(NumberFormatException ex){
