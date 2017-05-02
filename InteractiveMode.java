@@ -7,39 +7,21 @@ public class InteractiveMode extends GameMode {
 	public InteractiveMode(String[] args){
 		super(args);
 	}
-	//method that checks if the user can bet and bets it if it is the case
-	public void bet(){
-		if(state == 0){
-			//Change the value of the bet. if there is no value, the bet keeps its previous value.
-			if(userInput.length > 2){
-				System.out.println("Please, choose only one value to bet: [b i]\n Try Again");
-				return;
-			}else if(userInput.length == 2){
-				bet = Integer.parseInt(userInput[1]);
-				if(bet < 1 || bet > 5){
-					System.out.println("Invalid bet, please choose a proper value [1 - 5].");
-					bet = previousBet;
-					return;
-				}else{
-					if(bet <= credit){
-						previousBet = bet;
-					}else{
-						System.out.println("Not enough credits. Betting what you have");
-						bet = credit;
-					}
-				}
-			}
-			credit -= bet;
-			state = 1;
-			System.out.println("You bet " + bet);
-		}else{
-			System.out.println("b: illegal command.");
-		}
-	}
-	public void interactive(){
+	
+	
+	
+	
+	public void runner(String[] args, Score score){
 		System.out.println("You chose the interactive mode with "+credit+ " credit");
+		
 		//The program is a cycle that only ends when the player quits. ??Maybe also end when the player has no credits left.
 				while(state != hasQuit){
+					
+					if(credit == 0 && state == 0){
+						System.out.println("You have no credits. Insert credits to play");
+						score.printStats(Integer.parseInt(args[1]), credit);
+						break;
+					}
 					
 					if(state == 0){
 						//For each new play, we need to open a new deck
@@ -51,7 +33,28 @@ public class InteractiveMode extends GameMode {
 						//that will be used to replace the cards chosen by the player.
 						hand = new Hand(deck, handSize);
 						hand.sort();
-					}								
+					}
+					
+					System.out.println("What will you do?");
+					
+					//Showing the player messages to guide him through the game
+					System.out.println("[$] credit");
+					
+					if(state == 0){
+						System.out.println("[b] bet");
+						System.out.println("[s] statistics");
+						System.out.println("[q] quit");
+					}
+					
+					if(state == 1){
+						System.out.println("[d] deal");
+					}
+
+					if(state == 2){
+						System.out.println("[h] hold");
+						System.out.println("[a] advice");
+					}
+					
 					//First we read the whole line written by the user
 					userInput = reader.nextLine().toLowerCase().split(" ");
 					
@@ -62,6 +65,8 @@ public class InteractiveMode extends GameMode {
 						System.out.println(userInput[0] + ": illegal command, choose a valid one.");
 						continue;
 					}
+					
+					
 					
 					//After getting input, we process it
 					switch(input){
@@ -100,6 +105,7 @@ public class InteractiveMode extends GameMode {
 									}
 								}
 							}
+							
 							if(state == 3){
 								state = 2;
 								break;
@@ -114,74 +120,13 @@ public class InteractiveMode extends GameMode {
 								hand.replace(i);
 							}
 						}
+
 						//hand.rigHand(new int[]{10, 1, 5, 8, 0}, new int[]{0, 2, 2, 1, 3});
 						hand.sort();
 						System.out.println("player's hand " + hand);
-						switch( hand.isCombination() ){
-						case 11:
-							type_hand = "Royal Flush";
-							if(bet==1)
-								credit+=250;
-							if(bet==2)
-								credit+=500;
-							if(bet==3)
-								credit+=750;
-							if(bet==4)
-								credit+=1000;
-							if(bet==5)
-								credit+=4000;
-							break;
-						case 10:
-							type_hand = "Straight Flush";
-							if(bet==1)
-								credit+=50;
-							if(bet==2)
-								credit+=100;
-							if(bet==3)
-								credit+=150;
-							if(bet==4)
-								credit+=200;
-							if(bet==5)
-								credit+=250;
-							break;
-						case 9:
-							type_hand = "Four Aces";
-							if(bet==1)
-								credit+=160;
-							if(bet==2)
-								credit+=320;
-							break;
-						case 8:
-							type_hand = "High Four of a kind";
-							break;
-						case 7:
-							type_hand = "Low four of a kind";
-							break;
-						case 6:
-							type_hand = "Full House";
-							break;
-						case 5:
-							type_hand = "Flush";
-							break;
-						case 4:
-							type_hand = "Straight";
-							break;
-						case 3:
-							type_hand = "Three of a Kind";
-							break;
-						case 2:
-							type_hand = "Two Pair";
-							break;
-						case 1:
-							type_hand = "Jacks or Better";
-							break;
-						default:
-							System.out.println("You lost and your credit is " + credit + ".");
-						}
-						if(hand.isCombination() != 0){
-							//should print the type of hand he won with, not the cards itself
-							System.out.println("You won with a " + type_hand + " and now your credit is " + credit + "!");
-						}
+						
+						credit = score.result(hand, bet, credit);
+						
 						state = 0;
 						break;
 						
@@ -190,7 +135,7 @@ public class InteractiveMode extends GameMode {
 						break;
 						
 					case 's':
-						
+						score.printStats(Integer.parseInt(args[1]), credit);
 						break;
 						
 					case 'q':

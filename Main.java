@@ -1,29 +1,33 @@
+
 package group18;
 
 public class Main {
 
 	public static void main(String[] args) {
+	
 		//Class variables
 		GameMode game = null;
-		int opt =0;
+		Score score = new Score();
 		
 		//Reading the arguments to see if the program was initialized correctly
 		//Initializing the credit variable with the amount requested by the player
-		if(args[0].equals("-i")){
-			game = new InteractiveMode(args);
-			opt = 1;
-		}else if(args[0].equals("-d")){
-			game = new DebugMode(args);
-			opt = 2;
-		}else if(args[0].equals("-s")){
-			game = new SimulationMode(args);
-			opt = 3;
+		if(args.length != 0){
+			if(args[0].equals("-i")){
+				game = new InteractiveMode(args);
+			}else if(args[0].equals("-d")){
+				game = new DebugMode(args);
+			}else if(args[0].equals("-s")){
+				game = new SimulationMode(args);
+			}
 		}else{
-			System.out.println("Not enough arguments\nUsage: -i or -d (file) or -s"); //Falta uma cena antes do -i... não sei correr programas T-T
-			System.exit(-1);
+			System.out.println("Not enough arguments. Usage -mode arguments. Can be:");
+			System.out.println("-i [credits] -> interactive");
+			System.out.println("-d [file]    -> debug");
+			System.out.println("-s           -> simulation");
+			System.exit(-1);;
 		}
 		
-		game.runner(args, opt);
+		game.runner(args, score);
 		/************************************
 		 * ??(TO BE DISCUSSED WITH GROUP.	*
 		 * Particularly statistics)			*

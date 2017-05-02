@@ -9,7 +9,7 @@ public class DebugMode extends GameMode{
 		card_file = args[3];
 	}
 	
-	public void debug(){
+	public void runner(String[] args, Score score){
 		System.out.println("You chose the debug mode. Loading game...");
 		
 	}

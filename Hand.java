@@ -59,16 +59,20 @@ public class Hand {
 		return true;
 	}
 	
+	
 	//opt chooses what kind of straight it will check, 0 for royal and straight; 1 for flush and straight
 	//this is done for efficiency
 	public int checkStraight(int opt){ 
-		boolean flush=this.compareSuit();
+		
+		boolean flush = this.compareSuit();
 		//Royal Flush: same suit, A K Q J 10
 		int[] royal = new int[]{Card.ACE,Card.TEN,Card.JACK,Card.QUEEN,Card.KING};
+		
 		//all values of a deck
 		int[] deck = new int[]{Card.ACE,Card.DEUCE,Card.THREE,Card.FOUR,Card.FIVE,Card.SIX,Card.SEVEN,Card.EIGHT,Card.NINE,Card.TEN,Card.JACK,Card.QUEEN,Card.KING};
 		int value=0;
 		int i,j;
+		
 		if(opt == 0){
 			if(!flush)
 				return 0; //not any type of flush
@@ -120,13 +124,14 @@ public class Hand {
 			}
 		}
 		return 0;
-}
+	}
+	
 	public int checkOcurrence(int opt){
 		Integer i;
 		Integer counter=1;
 		Integer value=0;
 		if(opt==0){
-			if(this.cards[1].getValue() != this.cards[3].getValue()) //qd era full house dava porcaria(esparguete)
+			if(this.cards[1].getValue() != this.cards[3].getValue()) //quando era full house dava porcaria(esparguete)
 				return 0;
 			for(i=0;i<this.length()-1;i++){
 				if(this.cards[i].getValue()==this.cards[i+1].getValue()){
@@ -155,6 +160,8 @@ public class Hand {
 		}
 		return 0;
 	}
+	
+	
 	public int isFullHouse(){ //isto está um bocado hardcoded lol
 		int i;
 		
@@ -176,6 +183,7 @@ public class Hand {
 		return 0;
 	}
 	
+	
 	public int isNPair(){
 		Integer counter=0;
 		Integer value = 0;
@@ -194,6 +202,8 @@ public class Hand {
 		}
 		return 0;
 	}
+	
+	
 	public int isCombination(){ //Giant function, checks if the player's hand is worth something
 		int value = 0;
 		
@@ -222,6 +232,7 @@ public class Hand {
 		for(int i =0; i< handSize;i++){
 			this.cards[i] = new Card(vals[i], suits[i]);
 		}
+		
 		return;
 	}
 }

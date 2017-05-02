@@ -11,7 +11,7 @@ public class SimulationMode extends GameMode{
 		nbdeals = Integer.parseInt(args[3]);
 	}
 	
-	public void simulation(){
+	public void runner(String[] args, Score score){
 		System.out.println("You chose the simulation mode");
 	}
 }
