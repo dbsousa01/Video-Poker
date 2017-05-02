@@ -34,7 +34,7 @@ public class Score {
 		System.out.println("______________________");
 		System.out.println("\nTotal            " + plays);
 		System.out.println("______________________");
-		System.out.println("\nCredit        " + credit + " " + ((credit*100)/iniCredit) + "%\n");
+		System.out.println("\nCredit        " + credit + " " + ((credit*100)/iniCredit) + "%");
 		
 	}
 	

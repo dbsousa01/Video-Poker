@@ -3,7 +3,7 @@ package group18;
 public class Card implements Comparable<Card>{
 	
 	//Macros
-	private final static String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
+	private final static String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"};
 	private final static String[] suits = {"S", "C", "D", "H"};
 	
 	// Kinds of suits

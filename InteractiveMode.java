@@ -127,7 +127,7 @@ public class InteractiveMode extends GameMode {
 							}
 						}
 
-						hand.rigHand(new int[]{10, 11, 12, 9, 0}, new int[]{0, 0, 0, 0, 0});
+						//hand.rigHand(new int[]{10, 11, 12, 9, 0}, new int[]{0, 0, 0, 0, 0});
 						hand.sort();
 						System.out.println("player's hand " + hand);
 						
