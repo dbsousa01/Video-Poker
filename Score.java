@@ -236,14 +236,10 @@ public class Score {
 	
 	
 	
-	public int[] strategy(Hand hand){
+	//public int[] strategy(Hand hand){
 		
-		return new int[]{0 0};
-	}
-	
-	
-	
-	
+		//return new int[]{0 0};
+	//}
 }
 
 	

@@ -9,8 +9,6 @@ public class InteractiveMode extends GameMode {
 	}
 	
 	
-	
-	
 	public void runner(String[] args, Score score){
 		System.out.println("You chose the interactive mode with "+credit+ " credit");
 		
@@ -18,7 +16,7 @@ public class InteractiveMode extends GameMode {
 				while(state != hasQuit){
 					
 					if(credit == 0 && state == 0){
-						System.out.println("You have no credits. Insert credits to play");
+						System.out.println("You have no credit");
 						score.printStats(Integer.parseInt(args[1]), credit);
 						break;
 					}
@@ -34,7 +32,7 @@ public class InteractiveMode extends GameMode {
 						hand = new Hand(deck, handSize);
 						hand.sort();
 					}
-					
+					/* estes prints so ocupam espaço no programa.
 					System.out.println("What will you do?");
 					
 					//Showing the player messages to guide him through the game
@@ -57,7 +55,7 @@ public class InteractiveMode extends GameMode {
 						System.out.println("[h] hold");
 						System.out.println("[a] advice");
 					}
-					
+					*/
 					//First we read the whole line written by the user
 					userInput = reader.nextLine().toLowerCase().split(" ");
 					
@@ -149,7 +147,7 @@ public class InteractiveMode extends GameMode {
 					case 'q':
 						if(state == 0){
 							state = hasQuit;
-							score.printStats(Integer.parseInt(args[1]), credit);
+							//score.printStats(Integer.parseInt(args[1]), credit);
 							System.out.println("Thank you for playing!");
 						}else{
 							System.out.println("You can't quit now. You're locked here with me. :) ");
@@ -158,7 +156,7 @@ public class InteractiveMode extends GameMode {
 						break;
 						
 					default:
-						System.out.println(input +": illegal command. Available options:");
+						System.out.println(input +": illegal command.");
 					}
 				}
 	}
