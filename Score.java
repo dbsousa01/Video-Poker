@@ -14,7 +14,7 @@ public class Score {
 	
 	//Variables
 	int[] stats = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //{Jacks or better, Two pairs, Three of a kind, Straight, Flush, Full house, 4 of a kind, Straight flush, Royal flush, other <- what does this mean?}
-	int total = 0;
+	int plays = 0;
 	
 	
 	public void printStats(int iniCredit, int credit){
@@ -32,18 +32,22 @@ public class Score {
 		System.out.println("Royal flush      " + stats[8]);
 		System.out.println("Other            " + stats[9]);
 		System.out.println("______________________");
-		System.out.println("\nTotal            " + total);
+		System.out.println("\nTotal            " + plays);
 		System.out.println("______________________");
-		System.out.println("\nCredit        " + credit + " " + ((credit/iniCredit)*100-100) + "%\n");
+		System.out.println("\nCredit        " + credit + " " + ((credit*100)/iniCredit) + "%\n");
 		
 	}
 	
+	
+	public int getPlays(){
+		return this.plays;
+	}
 	
 	public int result(Hand hand, int bet, int credit){
 	
 		String type_hand = "";
 		
-		total++;
+		plays++;
 		
 		switch( hand.isCombination() ){
 		case 11:
@@ -228,6 +232,17 @@ public class Score {
 		
 		return credit;
 	}
+	
+	
+	
+	
+	public int[] strategy(Hand hand){
+		
+		return new int[]{0 0};
+	}
+	
+	
+	
 	
 }
 

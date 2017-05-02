@@ -42,6 +42,9 @@ public class InteractiveMode extends GameMode {
 					
 					if(state == 0){
 						System.out.println("[b] bet");
+						if(score.getPlays() != 0){
+							System.out.println("[d] deal");
+						}
 						System.out.println("[s] statistics");
 						System.out.println("[q] quit");
 					}
@@ -126,7 +129,7 @@ public class InteractiveMode extends GameMode {
 							}
 						}
 
-						//hand.rigHand(new int[]{10, 1, 5, 8, 0}, new int[]{0, 2, 2, 1, 3});
+						hand.rigHand(new int[]{10, 11, 12, 9, 0}, new int[]{0, 0, 0, 0, 0});
 						hand.sort();
 						System.out.println("player's hand " + hand);
 						
@@ -146,10 +149,12 @@ public class InteractiveMode extends GameMode {
 					case 'q':
 						if(state == 0){
 							state = hasQuit;
+							score.printStats(Integer.parseInt(args[1]), credit);
 							System.out.println("Thank you for playing!");
 						}else{
 							System.out.println("You can't quit now. You're locked here with me. :) ");
 						}
+						
 						break;
 						
 					default:

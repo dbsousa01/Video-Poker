@@ -54,6 +54,7 @@ public abstract class GameMode {
 		}
 		
 		credit -= bet;
+		System.out.println("You bet " + bet);
 	}
 	
 	//method that checks if the user can bet and bets it if it is the case
@@ -75,7 +76,6 @@ public abstract class GameMode {
 			bet(bet);
 			
 			state = 1;
-			System.out.println("You bet " + bet);
 		}else{
 			System.out.println("b: illegal command.");
 		}
