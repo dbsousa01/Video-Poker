@@ -79,6 +79,11 @@ public class InteractiveMode extends GameMode {
 						break;
 						
 					case 'd':
+						if(state == 0 && score.getPlays() != 0){
+							bet(previousBet);
+							state = 1;
+						}
+						
 						if(state == 1){
 							System.out.println(hand);
 							state = 2;

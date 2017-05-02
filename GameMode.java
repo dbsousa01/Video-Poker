@@ -45,6 +45,17 @@ public abstract class GameMode {
 		System.out.println("Your credit is " + credit);
 	}
 	
+	public void bet(int amount){
+		if(bet <= credit){
+			previousBet = bet;
+		}else{
+			System.out.println("Not enough credits. Going ALL IN!");
+			bet = credit;
+		}
+		
+		credit -= bet;
+	}
+	
 	//method that checks if the user can bet and bets it if it is the case
 	public void bet(){
 		if(state == 0){
@@ -61,14 +72,8 @@ public abstract class GameMode {
 				}
 			}
 
-			if(bet <= credit){
-				previousBet = bet;
-			}else{
-				System.out.println("Not enough credits. Going ALL IN!");
-				bet = credit;
-			}
+			bet(bet);
 			
-			credit -= bet;
 			state = 1;
 			System.out.println("You bet " + bet);
 		}else{
@@ -76,6 +81,7 @@ public abstract class GameMode {
 		}
 	}
 
+	
 	public void runner(String[] args, Score score){
 	
 	}
