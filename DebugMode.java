@@ -67,38 +67,75 @@ public class DebugMode extends GameMode{
 	
 	public void runner(String[] args, Score score){
 		ListIterator<String> itr = play.listIterator();
+		ListIterator<Card> card_itr = cards.listIterator();
+		
 		Integer userBet = 0;
+		int state = 1;
+		int[] vals = new int[5];
+		int[] suits = new int[5];
 		
 		while(itr.hasNext()){ //Parses through the linked list of plays
-			while(true){
+			while(state == 1){
 				userInput = reader.nextLine().toLowerCase().split(" "); // reads input user
 				if(userInput.length <= 1 || !(userInput[0].equals("-cmd"))){
 					System.out.println("Wrong Input");
 				}else{
 					switch(userInput[1].charAt(0)){ //user input
 					case 'b':
-						System.out.println("Found b ");
+						if(!(itr.next().equals("b"))){ //List does not have a b next
+							System.out.println("Wrong Input. Try Again");
+							itr.previous();
+							break;
+						}
 						try{
-							userBet = Integer.parseInt(userInput[2]); //Check if the user wrote a number
 							bet = Integer.parseInt(itr.next()); //check if the next element is a number
-							Integer.parseInt(userInput[2]);
 							previousBet = bet;
 						}catch(NumberFormatException e){
 							bet = previousBet;
 							itr.previous(); //goes back on the list
+						}
+						try{
+							userBet = Integer.parseInt(userInput[2]); //Check if the user wrote a number
 						}catch(ArrayIndexOutOfBoundsException e){
-							userBet = previousBet; //user chose previous bet
+							userBet = previousBet;
 						}
 						if(userBet.equals(bet)){
+							credit-=bet;
 							bet(bet);
-						}else
+							state = 0;
+						}else{
+							System.out.println("Unexpected Input. Try Again");
+							itr.previous();
+						}
+						break;
+					case 'd':
+						if(!(itr.next().equals("d")) || userInput.length > 2){
+							System.out.println("Wrong Input. Try Again");
+							itr.previous();
 							break;
+						}
+						for(int i=0;i<=4;i++){
+							vals[i] = card_itr.next().getValue();
+							card_itr.previous();
+							suits[i]= card_itr.next().getSuit();
+						}
+						hand.rigHand(vals, suits);
+						System.out.println(hand);
+						break;
+					case '$':
+						if(!(itr.next().equals("$")) || userInput.length > 2){
+							System.out.println("Wrong Input. Try Again");
+							itr.previous();
+						}else{
+							Show_credit();
+						}
+						break;
 					default:
 						System.out.println("Unexpected Input. Try Again");
 					}	
 				}
-				
 			}
+			state = 1;
 		}
 	}
 }
