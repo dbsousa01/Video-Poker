@@ -183,7 +183,6 @@ public class Hand {
 		return 0;
 	}
 	
-	
 	public int isNPair(){
 		Integer counter=0;
 		Integer value = 0;

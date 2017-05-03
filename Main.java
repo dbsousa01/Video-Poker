@@ -1,7 +1,7 @@
 
 package group18;
 
-public class Main {
+public class Main{
 
 	public static void main(String[] args) {
 	
@@ -60,7 +60,7 @@ public class Main {
 		*Use:	b: bet the same as the last bet or 5 tokens, if there is no previews bet;						*
 		*		b i: bet i tokens.																				*
 		*																										*
-		*??$ - Show the amount of tokens the player has??														*
+		*$ - Show the amount of tokens the player has														*
 		*																										*
 		*d - Deal the cards. Can only be used in the beginning of a round, after the bet.						*
 		*																										*

@@ -30,7 +30,7 @@ public class InteractiveMode extends GameMode {
 						//now we create the initial player's hand and the 5 replacement cards,
 						//that will be used to replace the cards chosen by the player.
 						hand = new Hand(deck, handSize);
-						hand.sort();
+						//hand.sort();
 					}
 					/* estes prints so ocupam espaço no programa.
 					System.out.println("What will you do?");
@@ -66,8 +66,6 @@ public class InteractiveMode extends GameMode {
 						System.out.println(userInput[0] + ": illegal command, choose a valid one.");
 						continue;
 					}
-					
-					
 					
 					//After getting input, we process it
 					switch(input){
@@ -126,10 +124,11 @@ public class InteractiveMode extends GameMode {
 								hand.replace(i);
 							}
 						}
+						//hand.sort();
 
+						System.out.println("player's hand " + hand);
 						//hand.rigHand(new int[]{10, 11, 12, 9, 0}, new int[]{0, 0, 0, 0, 0});
 						hand.sort();
-						System.out.println("player's hand " + hand);
 						
 						credit = score.result(hand, bet, credit);
 						

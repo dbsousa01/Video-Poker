@@ -3,6 +3,7 @@ package group18;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList; //List or array? :thinking:
+import java.util.ListIterator;
 import java.util.Scanner;
 
 public class DebugMode extends GameMode{
@@ -15,7 +16,6 @@ public class DebugMode extends GameMode{
 	private final static String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"};
 	private final static String[] suits = {"S", "C", "D", "H"};
 	 
-	@SuppressWarnings("resource")
 	public DebugMode(String[] args){
 		super(args);
 		if(args.length <4){
@@ -29,6 +29,7 @@ public class DebugMode extends GameMode{
 		try{
 			Scanner input = new Scanner(cmd_file);
 			File file_cmd = new File(input.nextLine());
+			input.close();
 			input = new Scanner(file_cmd);
 			
 			while(input.hasNextLine()){ //Reads all lines of the file
@@ -37,8 +38,10 @@ public class DebugMode extends GameMode{
 					play.addLast(s); //Adds the char to the linked list.
 				}
 			}
+			input.close();
 			input = new Scanner(card_file);
 			file_cmd = new File(input.nextLine());
+			input.close();
 			input = new Scanner(file_cmd);
 			
 			while(input.hasNextLine()){ //Reads all lines of the file
@@ -63,11 +66,39 @@ public class DebugMode extends GameMode{
 	}
 	
 	public void runner(String[] args, Score score){
-		System.out.println("You chose the debug mode. Loading game...");
-		for(Card c :cards){
-			System.out.println(c);
-		}
+		ListIterator<String> itr = play.listIterator();
+		Integer userBet = 0;
 		
+		while(itr.hasNext()){ //Parses through the linked list of plays
+			while(true){
+				userInput = reader.nextLine().toLowerCase().split(" "); // reads input user
+				if(userInput.length <= 1 || !(userInput[0].equals("-cmd"))){
+					System.out.println("Wrong Input");
+				}else{
+					switch(userInput[1].charAt(0)){ //user input
+					case 'b':
+						System.out.println("Found b ");
+						try{
+							userBet = Integer.parseInt(userInput[2]); //Check if the user wrote a number
+							bet = Integer.parseInt(itr.next()); //check if the next element is a number
+							Integer.parseInt(userInput[2]);
+							previousBet = bet;
+						}catch(NumberFormatException e){
+							bet = previousBet;
+							itr.previous(); //goes back on the list
+						}catch(ArrayIndexOutOfBoundsException e){
+							userBet = previousBet; //user chose previous bet
+						}
+						if(userBet.equals(bet)){
+							bet(bet);
+						}else
+							break;
+					default:
+						System.out.println("Unexpected Input. Try Again");
+					}	
+				}
+				
+			}
+		}
 	}
-
 }

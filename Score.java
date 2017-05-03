@@ -16,7 +16,6 @@ public class Score {
 	int[] stats = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //{Jacks or better, Two pairs, Three of a kind, Straight, Flush, Full house, 4 of a kind, Straight flush, Royal flush, other <- what does this mean?}
 	int plays = 0;
 	
-	
 	public void printStats(int iniCredit, int credit){
 
 		System.out.println("\nHand            nb");

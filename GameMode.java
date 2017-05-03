@@ -68,7 +68,11 @@ public abstract class GameMode {
 				System.out.println("Please, choose only one value to bet: [b i]\n Try Again");
 				return;
 			}else if(userInput.length == 2){
-				bet = Integer.parseInt(userInput[1]);
+				try{
+					bet = Integer.parseInt(userInput[1]);
+				}catch(NumberFormatException ex){
+					System.out.println("Not a valid number");
+				}
 				if(bet < 1 || bet > 5){
 					System.out.println("Invalid bet, please choose a proper value [1 - 5].");
 					bet = previousBet;
