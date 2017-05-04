@@ -45,7 +45,13 @@ public class Hand {
 			cards[index] = replacement[index];
 		}
 	}
-	
+	public void replace(int index, Card card){
+		if(index > handSize){
+			System.out.println("Card out of range. The hand only has " + handSize);
+		}else{
+			cards[index] = card;
+		}
+	}
 	public void sort(){
 		
 		Arrays.sort(this.cards);

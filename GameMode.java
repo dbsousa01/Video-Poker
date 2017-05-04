@@ -74,7 +74,7 @@ public abstract class GameMode {
 					System.out.println("Not a valid number");
 				}
 				if(bet < 1 || bet > 5){
-					System.out.println("Invalid bet, please choose a proper value [1 - 5].");
+					System.out.println(userInput[0] + " Illegal amount.");
 					bet = previousBet;
 					return;
 				}
@@ -89,12 +89,12 @@ public abstract class GameMode {
 				return;
 			}else if(userInput.length == 3){
 				try{
-					bet = Integer.parseInt(userInput[1]);
+					bet = Integer.parseInt(userInput[2]);
 				}catch(NumberFormatException ex){
 					System.out.println("Not a valid number");
 				}
 				if(bet < 1 || bet > 5){
-					System.out.println("Invalid bet, please choose a proper value [1 - 5].");
+					System.out.println(userInput[1] + ": Illegal amount.");
 					bet = previousBet;
 					return;
 				}

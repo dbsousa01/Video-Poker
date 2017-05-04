@@ -2,8 +2,10 @@ package group18;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.LinkedList; //List or array? :thinking:
 import java.util.ListIterator;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class DebugMode extends GameMode{
@@ -15,6 +17,9 @@ public class DebugMode extends GameMode{
 	
 	private final static String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"};
 	private final static String[] suits = {"S", "C", "D", "H"};
+	
+	Integer[] holdUser = new Integer[5];
+	Integer [] holdList = new Integer[5];
 	 
 	public DebugMode(String[] args){
 		super(args);
@@ -26,6 +31,10 @@ public class DebugMode extends GameMode{
 		card_file = args[3];
 		
 		int i,j;
+		for(i = 0;i<holdUser.length; i++){
+			holdUser[i]= 0;
+			holdList[i]=0;
+		}
 		try{
 			Scanner input = new Scanner(cmd_file);
 			File file_cmd = new File(input.nextLine());
@@ -64,121 +73,182 @@ public class DebugMode extends GameMode{
 			System.exit(0);
 		}
 	}
-	
+	public void cleanVectors(){
+		for(int i = 0;i<holdUser.length; i++){
+			holdUser[i]= 0;
+			holdList[i]=0;
+		}
+	}
 	public void runner(String[] args, Score score){
 		ListIterator<String> itr = play.listIterator();
 		ListIterator<Card> card_itr = cards.listIterator();
 		
 		Integer userBet = 0;
 		int betted = 0;
+		int aux, i;
+		Integer backup = 0;
 		int[] vals = new int[5];
 		int[] suits = new int[5];
 		state = 4;
 		
-		while(itr.hasNext()){ //Parses through the linked list of plays
-			while(state == 4){
-				userInput = reader.nextLine().toLowerCase().split(" "); // reads input user
-				if(userInput.length <= 1 || !(userInput[0].equals("-cmd"))){
-					System.out.println("Wrong Input");
-				}else{
-					switch(userInput[1].charAt(0)){ //user input
-					case 'b':
-						if(!(itr.next().equals("b"))){ //List does not have a b next
-							System.out.println("Unexpected Input. Try Again");
-							itr.previous();
-							break;
-						}
-						try{
-							bet = Integer.parseInt(itr.next()); //check if the next element is a number
-							previousBet = bet;
-						}catch(NumberFormatException e){
-							bet = previousBet;
-							itr.previous(); //goes back on the list
-						}
-						try{
-							userBet = Integer.parseInt(userInput[2]); //Check if the user wrote a number
-						}catch(ArrayIndexOutOfBoundsException e){
-							userBet = previousBet;
-						}
-						if(userBet.equals(bet)){
-							if(credit < bet){
-								System.out.println("Oops. Something went wrong. You can bet in the file but have no funds to do it. Load more credit");
-								System.exit(1);
-							}
-							credit-=bet;
-							bet();
-							state = 1;
-							betted = 1;
-						}else{
-							System.out.println("Unexpected Input. Try Again");
-							itr.previous();
-						}
-						break;
-					case 'd':
-						if(!(itr.next().equals("d")) || userInput.length > 2){
-							System.out.println("Unexpected Input. Try Again");
-							itr.previous();
-							break;
-						}
-						if(betted == 1 && score.getPlays() != 0)
-							bet(previousBet);
-						for(int i=0;i<=4;i++){
-							vals[i] = card_itr.next().getValue();
-							card_itr.previous();
-							suits[i]= card_itr.next().getSuit();
-						}
-						hand.rigHand(vals, suits);
-						System.out.println("player's hand " + hand);
-						break;
-					case 'h':
-						if(!(itr.next().equals("h")) || userInput.length > 7){
-							System.out.println("Unexpected Input. Try Again");
-							itr.previous();
-							break;
-						}
-						System.out.println("player's hand " + hand);
-						hand.sort();
-						credit = score.result(hand, bet, credit);
-						break;
-					case '$':
-						if(!(itr.next().equals("$")) || userInput.length > 2){
-							System.out.println("Wrong Input. Try Again");
-							itr.previous();
-						}else
-							Show_credit();
-						break;
-					case 'a':
-						if(!(itr.next().equals("a"))|| userInput.length > 2){
-							System.out.println("Unexpected Input. Try Again");
-							itr.previous();
-							break;
-						}
-						System.out.println("The advice is...");
-						break;
-					case 's':
-						if(!(itr.next().equals("s")) || userInput.length > 2){
-							System.out.println("Unexpected Input. Try Again");
-							itr.previous();
-							break;
-						}
-						score.printStats(Integer.parseInt(args[1]), credit);
-						break;
-					case 'q':
-						if(!(itr.next().equals("q")) || userInput.length > 2){
-							System.out.println("Wrong Input. Try Again");
-							itr.previous();
-							break;
-						}
-						System.out.println("Thank you for playing");
-						System.exit(0);
-						break;
-					default:
+		
+		
+		while(itr.hasNext() && state == 4){ //Parses through the linked list of plays
+			userInput = reader.nextLine().toLowerCase().split(" "); // reads input user
+			if(userInput.length <= 1 || !(userInput[0].equals("-cmd"))){
+				System.out.println("Wrong Input");
+			}else{
+				switch(userInput[1].charAt(0)){ //user input
+				case 'b':
+					if(!(itr.next().equals("b"))){ //List does not have a b next
 						System.out.println("Unexpected Input. Try Again");
-					}	
-				}
+						itr.previous();
+						break;
+					}
+					try{
+						bet = Integer.parseInt(itr.next()); //check if the next element is a number
+						if(bet < 1 || bet > 5){
+							System.out.println(userInput[1] + ": Illegal amount.");
+							break;
+						}
+						previousBet = bet;
+					}catch(NumberFormatException e){
+						bet = previousBet;
+						itr.previous(); //goes back on the list
+					}
+					try{
+						userBet = Integer.parseInt(userInput[2]); //Check if the user wrote a number
+					}catch(ArrayIndexOutOfBoundsException e){
+						userBet = previousBet;
+					}catch(NumberFormatException e){
+						System.out.println("Unexpected Input. Try Again");
+						itr.previous();
+						break;
+					}
+					if(userBet.equals(bet)){
+						if(credit < bet){
+							System.out.println("Oops. Something went wrong. You can bet in the file but have no funds to do it. Load more credit");
+							System.exit(1);
+						}
+						bet();
+						betted = 1;
+					}else{
+						System.out.println("Unexpected Input. Try Again");
+						itr.previous();
+					}
+					break;
+				case 'h':
+					if(!(itr.next().equals("h")) || userInput.length > 7){
+						System.out.println("Unexpected Input. Try Again");
+						itr.previous();
+						break;
+					}
+					cleanVectors();
+					for(i=2;i<userInput.length;i++){
+						try{
+							aux = Integer.parseInt(userInput[i]);
+							this.holdUser[aux-1] = 1; //cards user wants to hold
+						}catch(ArrayIndexOutOfBoundsException e){
+							break;
+						}catch(NumberFormatException e){
+							System.out.println("Unexpected Input. Try Again");
+							state = 0;
+							break;
+						}
+					}
+					backup = 1;
+					while(true){
+						try{
+							aux = Integer.parseInt(itr.next());
+							this.holdList[aux-1] = 1; //card list wants to hold
+							backup++;
+						}catch(NoSuchElementException e){ //end of the list
+							break;
+						}catch(NumberFormatException e){ //not a number
+							itr.previous();
+							break;
+						}
+					}
+					if(state == 0)
+						break;
+					if(!(Arrays.equals(holdUser,holdList))){ //checks it arrays match
+						while(!backup.equals(0)){
+							backup--;
+							itr.previous();
+						}
+						System.out.println("Unexpected Input. Try Again 11");
+						break; //the input does not match the file
+					}
+					for(i =0;i<holdUser.length;i++){
+						if(holdUser[i].equals(0)){
+							try{
+								hand.replace(i,card_itr.next());
+							}catch(IndexOutOfBoundsException e){ //card list empty
+								System.out.println("Something went terribly wrong!");
+								System.exit(-1);
+							}
+						}
+					}
+					System.out.println("player's hand " + hand);
+					hand.sort();
+					credit = score.result(hand, bet, credit);
+					betted = 0;
+					break;
+				case 'd':
+					if(!(itr.next().equals("d")) || userInput.length > 2){
+						System.out.println("Unexpected Input. Try Again");
+						itr.previous();
+						break;
+					}
+					if(betted == 0 && score.getPlays() != 0){
+						bet(previousBet);
+					}
+					for( i=0;i<=4;i++){
+						vals[i] = card_itr.next().getValue();
+						card_itr.previous();
+						suits[i]= card_itr.next().getSuit();
+					}
+					hand.rigHand(vals, suits);
+					System.out.println("player's hand " + hand);
+					break;
+				case '$':
+					if(!(itr.next().equals("$")) || userInput.length > 2){
+						System.out.println("Wrong Input. Try Again");
+						itr.previous();
+					}else
+						Show_credit();
+					break;
+				case 'a':
+					if(!(itr.next().equals("a"))|| userInput.length > 2){
+						System.out.println("Unexpected Input. Try Again");
+						itr.previous();
+						break;
+					}
+					System.out.println("The advice is...");
+					break;
+				case 's':
+					if(!(itr.next().equals("s")) || userInput.length > 2){
+						System.out.println("Unexpected Input. Try Again");
+						itr.previous();
+						break;
+					}
+					score.printStats(Integer.parseInt(args[1]), credit);
+					break;
+				case 'q':
+					if(!(itr.next().equals("q")) || userInput.length > 2){
+						System.out.println("Wrong Input. Try Again");
+						itr.previous();
+						break;
+					}
+					System.out.println("Thank you for playing");
+					System.exit(0);
+					break;
+				default:
+					System.out.println("Unexpected Input. Try Again");
+				}	
 			}
-			state = 4;
 		}
+		state = 4;
 		System.out.println("File has ended");
 	}
 }
