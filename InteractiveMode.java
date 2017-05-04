@@ -84,7 +84,7 @@ public class InteractiveMode extends GameMode {
 						}
 						
 						if(state == 1){
-							System.out.println(hand);
+							System.out.println("player's hand: " + hand);
 							state = 2;
 						}else{
 							System.out.println("d: illegal command");

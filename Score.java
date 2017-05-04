@@ -231,14 +231,6 @@ public class Score {
 		
 		return credit;
 	}
-	
-	
-	
-	
-	//public int[] strategy(Hand hand){
-		
-		//return new int[]{0 0};
-	//}
 }
 
 	
