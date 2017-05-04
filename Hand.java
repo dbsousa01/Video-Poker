@@ -1,10 +1,9 @@
-package video_poker;
+package group18;
 
 
 import java.util.Arrays;
 
 public class Hand {
-
 	
 	//Class variables
 	private Card[] cards;
@@ -19,14 +18,9 @@ public class Hand {
 		
 		for(int i = 0; i < handSize; i++){
 			this.cards[i] = deck.drawCard();
-		}
-		
-		for(int i = 0; i < handSize; i++){
 			this.replacement[i] = deck.drawCard();
 		}
 	}
-	
-	
 	@Override
 	public String toString() {
 		String aux = "";
@@ -38,12 +32,10 @@ public class Hand {
 		return aux;
 	}
 	
-	
 	public int length(){
 		
 		return handSize;
 	}
-	
 	
 	public void replace(int index){
 		
@@ -54,271 +46,193 @@ public class Hand {
 		}
 	}
 	
-	
 	public void sort(){
 		
 		Arrays.sort(this.cards);
 	}
 	
-	
-	//Method to create a rigged hand
-	public void rigHand(int[] vals, int[] suits){
-		
-		for(int i = 0; i < handSize; i++){
-			this.cards[i] = new Card(vals[i], suits[i]);
+	public boolean compareSuit(){ //Function that checks if the cards in hand are all the same suit
+		for(int i=1; i<this.length(); i++){
+			if(!(this.cards[0].equalsSuit(this.cards[i])))
+				return false;
 		}
+		return true;
 	}
 	
-	//Check if the hand has a pair
-	private boolean isPair(){
-		//Auxiliary variables
-		int counter = 0;
+	
+	//opt chooses what kind of straight it will check, 0 for royal and straight; 1 for flush and straight
+	//this is done for efficiency
+	public int checkStraight(int opt){ 
 		
-		for(int i = 0; i < this.handSize-1; i++){
-			if(this.cards[i].getValue() == 0 || this.cards[i].getValue() > 9){
-				if(this.cards[i].compareTo(this.cards[i+1]) == 0){
-					counter ++;
+		boolean flush = this.compareSuit();
+		//Royal Flush: same suit, A K Q J 10
+		int[] royal = new int[]{Card.ACE,Card.TEN,Card.JACK,Card.QUEEN,Card.KING};
+		
+		//all values of a deck
+		int[] deck = new int[]{Card.ACE,Card.DEUCE,Card.THREE,Card.FOUR,Card.FIVE,Card.SIX,Card.SEVEN,Card.EIGHT,Card.NINE,Card.TEN,Card.JACK,Card.QUEEN,Card.KING};
+		int value=0;
+		int i,j;
+		
+		if(opt == 0){
+			if(!flush)
+				return 0; //not any type of flush
+			
+			for(i=0;i<this.length();i++){
+				if(!(this.cards[i].getValue()==royal[i])){ //compares value of hand with royal flush hand
+					value = 0;
+					break; //not a royal flush	
+				}else
+					value =11; //So far it is a royal flush
+			}
+			if(value == 11) //Found a royal flush
+				return value;
+			
+			for(i=0;i<deck.length;i++){
+				if(this.cards[0].getValue()==deck[i]) //finds the first value of the seq in the deck array
+					break;
+			}
+			for(j=0;j<this.length();j++){//Compares the ordered hand with the ordered deck to check for a seq
+				if(!(this.cards[j].getValue()==deck[i])){
+					value = 0; //not a sequence
+					break;
+				}else{
+					value=10;
+					i++;
 				}
 			}
-		}
-		
-		if(counter == 1){
-			return true;
-		}else{		
-			return false;
-		}
-	}
-	
-	
-	//Check if the hand has two pairs.
-	//This will return true if there is a trio in hand, but since the verification for a trio is done first, it's cool
-	private boolean isTwoPair(){
-		int counter = 0;
-		
-		for(int i = 0; i < this.handSize-1; i++){
-			if(this.cards[i].compareTo(this.cards[i+1]) == 0){
-				counter++;
-			}
-		}
-		
-		if(counter == 2){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	private boolean isTrio(){
-		//Auxiliary variables
-		int counter = 0;
-		
-		for(int i = 0; i < handSize-1; i++){
-			if(this.cards[i].compareTo(this.cards[i+1]) == 0){
-				counter++;
-				if(counter == 2){
-					return true;
-				}
+			if(value==10) //Found a sequence! 
+				return 10;
+		}else if(opt == 1){//Check for Flush and Straight
+			if(flush){ //Check for a simple flush
+				return 5;
 			}else{
-				counter = 0;
+				for(i=0;i<deck.length;i++){
+					if(this.cards[0].getValue()==deck[i]) //finds the first value of the seq in the deck array
+						break;
+				}
+				for(j=0;j<this.length();j++){//Compares the ordered hand with the ordered deck to check for a seq
+					if(!(this.cards[j].getValue()==deck[i])){
+						value = 0; //not a sequence
+						break;
+					}else{
+						value=4;
+						i++;
+					}
+				}
+				if(value==4) //It is a Straight
+					return value;
 			}
 		}
-
-		return false;
+		return 0;
 	}
 	
-	
-	//Check if the hand has a straight
-	private boolean isStraight(){
-		//Auxiliary variables
-		int counter = 0;
-				
-		for(int i = 0; i < handSize-1; i++){
-			if(this.cards[i].getValue() == 12 || this.cards[0].getValue() == 0){ //If the last card is a King and the first is an Ace, it counts for the straight
-				counter++;
-			}else if(this.cards[i].getValue() + 1 == this.cards[i+1].getValue()){
-				counter ++; //If the next card's value is the current card's value + 1, we are 1 card closer to a straight.
-			}else{
-				counter = 0; //If the next card's value is not the current card's value + 1, we reset the counter.
-				//We can make an if(i > 2) to break out, since it's impossible to make a straight then.
-			}
-		}
-		
-		if(counter == 4){
-			return true;
-		}else{
-			return false;
-		}
-	}
-
-	//Check if the hand has a flush
-	private boolean isFlush(){
-		//Auxiliary variables
-		int counter = 0;
-		
-		for(int i = 0; i < handSize-1; i++){
-			if(this.cards[i].compareSuit(this.cards[i+1])){
-				counter++;
-			}
-		}
-		
-		if(counter >= 4){
-			return true;
-		}else{
-			return false;
-		}
-	}
-	
-	//Check if the hand has a full house
-	private boolean isFullHouse(){
-		//Auxiliary variables
-		int counter = 0;
-		
-		//This returns true if a four of a kind is found, but since the verification for
-		// a 4 of a kind comes first, all is cool
-		for(int i = 0; i < this.handSize-1; i++){
-			if(this.cards[i].compareTo(this.cards[i+1]) == 0){
-				counter ++;
-			}
-		}
-		
-		if(counter == 3){
-			return true;
-		}else{		
-			return false;
-		}
-	
-	}
-	
-	//Check if the hand has 4 of a kind (type 1)
-	private boolean isFour1(){
-		//Auxiliary variables
-		int counter = 0;
-		
-		for(int i = 0; i < handSize-1; i++){
-			if(this.cards[i].getValue() >= 4 && this.cards[i].getValue() <= 12){
-				if(this.cards[i].compareTo(this.cards[i+1]) == 0){
+	public int checkOcurrence(int opt){
+		Integer i;
+		Integer counter=1;
+		Integer value=0;
+		if(opt==0){
+			if(this.cards[1].getValue() != this.cards[3].getValue()) //quando era full house dava porcaria(esparguete)
+				return 0;
+			for(i=0;i<this.length()-1;i++){
+				if(this.cards[i].getValue()==this.cards[i+1].getValue()){
 					counter++;
-				}else{
-					counter = 0;
+					value = this.cards[i].getValue();
+					if(counter.equals(4)){
+						if(value.equals(0)) //Found four aces! 
+								return 9;
+						if(value.equals(1)||value.equals(2)||value.equals(3)) //Found four 2-4
+							return 8;
+						if(value.equals(4)||value.equals(5)||value.equals(6)||value.equals(7)||value.equals(8)||value.equals(9)
+								||value.equals(10)||value.equals(11)||value.equals(12))
+							return 7; //Found four 5-K
+					}
 				}
 			}
-		}
-		
-		if(counter == 3){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	
-	//Check if the hand has 4 of a kind (type 2)
-	private boolean isFour2(){
-		//Auxiliary variables
-		int counter = 0;
-		
-		for(int i = 0; i < handSize-1; i++){
-			if(this.cards[i].getValue() >= 1 && this.cards[i].getValue() <= 3){
-				if(this.cards[i].compareTo(this.cards[i+1]) == 0){
+		}else if(opt ==1){
+			for(i=0;i<this.length()-1;i++){
+				if(this.cards[i].getValue()==this.cards[i+1].getValue()){
 					counter++;
-				}else{
-					counter = 0;
-				}
+					if(counter.equals(3))
+						return 3; //Found a triple! 
+				}else
+					counter = 1;
 			}
 		}
-		
-		if(counter == 3){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	
-	//Check if the hand has 4 aces
-	private boolean isFourA(){
-		//Auxiliary variables
-		int counter = 0;
-		
-		for(int i = 0; i < handSize-1; i++){
-			if(this.cards[i].getValue() >= 0){
-				if(this.cards[i].compareTo(this.cards[i+1]) == 0){
-					counter++;
-				}else{
-					counter = 0;
-				}
-			}
-		}
-		
-		if(counter == 3){
-			return true;
-		}
-		else{
-			return false;
-		}
-	}
-	
-	//Check if hand has a straight flush
-	private boolean isStraightFlush(){
-		
-		if(this.isStraight()){
-			for(int i = 0; i < handSize-2; i++){
-				if(!this.cards[i].compareSuit(this.cards[i+1])){
-					return false;
-				}
-			}
-			return true;
-		}
-		
-		return false;
-	}
-	
-	public boolean isRoyalFlush(){
-		
-		if(this.isStraightFlush() && this.cards[1].getValue() == 9){
-			return true;
-		}
-		
-		return false;
-	}
-	
-	
-	
-	public int isCombination(){
-		
-		if(this.isRoyalFlush()){
-			return 11;
-		}else if(this.isStraightFlush()){
-			return 10;
-		}else if(this.isFourA()){
-			return 9;
-		}else if(this.isFour2()){
-			return 8;
-		}else if(this.isFour1()){
-			return 7;
-		}else if(this.isFullHouse()){
-			return 6;
-		}else if(this.isFlush()){
-			return 5;
-		}else if(this.isStraight()){
-			return 4;
-		}else if(this.isTrio()){
-			return 3;
-		}else if(this.isTwoPair()){
-			return 2;
-		}else if(this.isPair()){
-			return 1;
-		}
-		
 		return 0;
 	}
 	
 	
+	public int isFullHouse(){ //isto está um bocado hardcoded lol
+		int i;
+		
+		if(this.cards[0].getValue()==this.cards[1].getValue()){
+			if(this.cards[1].getValue()==this.cards[2].getValue()){ //If this happens, triple
+				if(this.cards[3].getValue()==this.cards[4].getValue())
+					return 6; //Found a full house. First a triple then a double
+				else
+					return 0; // Found just a triple, not a full house
+			}else{ //else it is a double
+				for(i=2;i<this.length()-1;i++){ //Check if the remaining 3 cards are a triple
+					if(this.cards[i].getValue()!=this.cards[i+1].getValue()){
+						return 0; //if they are not a triple, not a full house.
+					}
+				}
+				return 6;// if they are, found a full house! 
+			}
+		}
+		return 0;
+	}
 	
 	
+	public int isNPair(){
+		Integer counter=0;
+		Integer value = 0;
+		for(int i=0; i<this.length()-1;i++){
+			if(this.cards[i].getValue() == this.cards[i+1].getValue()){ //it's a pair
+				counter++;
+				value = this.cards[i].getValue(); 
+			}
+		}
+		if(counter.equals(2))
+			return 2;
+		else if(counter.equals(1)&&(value.equals(Card.JACK)||value.equals(Card.QUEEN)||value.equals(Card.KING)||
+				value.equals(Card.ACE))){
+			//Only one pair but Jacks or Higher
+			return 1;
+		}
+		return 0;
+	}
 	
 	
+	public int isCombination(){ //Giant function, checks if the player's hand is worth something
+		int value = 0;
+		
+		value = this.checkStraight(0); //Check for Royal and Straight flush
+		if(value!=0)
+			return value;
+		value = this.checkOcurrence(0); //Checks for Fours
+		if(value != 0)
+			return value;
+		value = this.isFullHouse(); //Check for Full House
+		if(value !=0)
+			return value;
+		value = this.checkStraight(1); //Check for Flush and Straight
+		if(value!=0)
+			return value;
+		value = this.checkOcurrence(1); //Checks for Triples
+		if(value !=0)
+			return value;
+		value = this.isNPair();//Checks for a 2Pair and a J or + pair
+		if(value !=0)
+			return value;
+		return 0;
+	}
 	
-	
-	
+	public void rigHand(int[] vals, int[] suits){
+		for(int i =0; i< handSize;i++){
+			this.cards[i] = new Card(vals[i], suits[i]);
+		}
+		
+		return;
+	}
 }
