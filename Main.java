@@ -1,42 +1,32 @@
-package video_poker;
-
-import java.util.Arrays;
-import java.util.Scanner;
+package group18;
 
 public class Main {
 
 	public static void main(String[] args) {
-
-		//Macros
-		int hasQuit = 3;
-		int maxBet = 5;
-		int handSize = 5;
-		
-		//Auxiliary variables
-		int previousBet = maxBet;
-		int[] toDiscard;
-		int toHold;
-		
+	
 		//Class variables
-		Deck deck = new Deck();
-		Hand hand = new Hand(deck, handSize);
-		int bet = maxBet;
-		Scanner reader = new Scanner(System.in);
-		String[] userInput;
-		char input;
-		int credit = 0;
-		int state = 0; //to track the state of the game
-
+		GameMode game = null;
+		Score score = new Score();
 		
-		//Reading the args to see if the program was initialized correctly
+		//Reading the arguments to see if the program was initialized correctly
 		//Initializing the credit variable with the amount requested by the player
-		if(args.length < 2){
-			System.out.println("Not enough arguments\nUsage: -i credit"); //Falta uma cena antes do -i... não sei correr programas T-T
-			System.exit(-1);
+		if(args.length != 0){
+			if(args[0].equals("-i")){
+				game = new InteractiveMode(args);
+			}else if(args[0].equals("-d")){
+				game = new DebugMode(args);
+			}else if(args[0].equals("-s")){
+				game = new SimulationMode(args);
+			}
 		}else{
-			credit = Integer.parseInt(args[1]);
+			System.out.println("Not enough arguments. Usage -mode arguments. Can be:");
+			System.out.println("-i [credits] -> interactive");
+			System.out.println("-d [file]    -> debug");
+			System.out.println("-s           -> simulation");
+			System.exit(-1);;
 		}
 		
+		game.runner(args, score);
 		/************************************
 		 * ??(TO BE DISCUSSED WITH GROUP.	*
 		 * Particularly statistics)			*
@@ -65,7 +55,7 @@ public class Main {
 		
 		/********************************************************************************************************
 		*Starting the interface with the player.																*
-		*b - Place a bet. Cannot be used after the deal or before the end of the dealer’s turn. 				*
+		*b - Place a bet. Cannot be used after the deal or before the end of the dealerâ€™s turn. 				*
 		*Use:	b: bet the same as the last bet or 5 tokens, if there is no previews bet;						*
 		*		b i: bet i tokens.																				*
 		*																										*
@@ -84,223 +74,5 @@ public class Main {
 		*
 		*q - Quit the game													*
 		********************************************************************************************************/
-		
-		
-		//The program is a cycle that only ends when the player quits. ??Maybe also end when the player has no credits left.
-		while(state != hasQuit){
-			
-			if(state == 0){
-				//For each new play, we need to open a new deck
-				//Then we need to shuffle the deck
-				deck = new Deck();
-				deck.shuffle();
-				
-				//now we create the initial player's hand and the 5 replacement cards,
-				//that will be used to replace the cards chosen by the player.
-				hand = new Hand(deck, handSize);
-				hand.sort();
-			}			
-			
-			
-			System.out.println("What will you do?");
-			
-			//Showing the player messages to guide him through the game
-			System.out.println("[$] credit");
-			
-			if(state == 0){
-				System.out.println("[b] bet");
-				System.out.println("[s] statistics");
-				System.out.println("[q] quit");
-			}
-			
-			if(state == 1){
-				System.out.println("[d] deal");
-			}
-
-			if(state == 2){
-				System.out.println("[h] hold");
-				System.out.println("[a] advice");
-			}
-			
-
-			//First we read the whole line written by the user
-			userInput = reader.nextLine().toLowerCase().split(" ");
-			
-			//Then we take the first word
-			if(userInput[0].length() == 1){
-				input = userInput[0].charAt(0);
-			}else{
-				System.out.println("Invalid command, please choose from the list.");
-				continue;
-			}
-			
-
-			//After getting input, we process it
-			switch(input){
-			case 'b':
-				//??TO DO: what happens when you try to bet more than your credit?
-				if(state == 0){
-					//Change the value of the bet. if there is no value, the bet keeps its previous value.
-					if(userInput.length > 2){
-						System.out.println("Please, chose only one value to bet: [b i]");
-						break;
-					}else if(userInput.length == 2){
-						bet = Integer.parseInt(userInput[1]);
-						if(bet < 1 || bet > 5){
-							System.out.println("Invalid bet, please choose a proper value [1 - 5].");
-							bet = previousBet;
-							break;
-						}else{
-							if(bet <= credit){
-								previousBet = bet;
-							}else{
-								System.out.println("Not enough credits.");
-								break;
-							}
-						}
-					}else{
-						if(bet <= credit){
-							previousBet = bet;
-						}else{
-							System.out.println("Not enough credits.");
-							break;
-						}
-					}
-					
-					credit -= bet;
-					state = 1;
-					System.out.println("You bet " + bet);
-				}else{
-					System.out.println("You can't bet right now.");
-				}
-				break;
-				
-			case '$':
-				System.out.println("Your credit is " + credit);
-				break;
-				
-			case 'd':
-				if(state == 1){
-					System.out.println(hand);
-					state = 2;
-				}else{
-					System.out.println("You can't deal cards right now");
-				}
-				break;
-				
-			case 'h':
-				if(state == 2){
-					//Creating the toDiscard array that will be used for the "hold" function
-					toDiscard = new int[hand.length()];
-					Arrays.fill(toDiscard, 1);
-					
-					//Uncomment this if amount of cards the player tries to hold is important
-					//if(userInput.length > handSize + 1){
-					//	System.out.println("How many cards are you trying to replace? You can only choose 5 cards (max).");
-					//	break;
-					//}else{
-						for(String aux: userInput){
-							if(!aux.equals("h")){
-								toHold = Integer.parseInt(aux);
-								if(toHold >= 1 && toHold <= 5){
-									toDiscard[toHold - 1] = 0;
-								}else{
-									System.out.println("Invalid value, please choose cards from those in hand [1 - 5].");
-									state = 3;
-									break;
-								}
-							}
-						}
-						
-						if(state == 3){
-							state = 2;
-							break;
-						}
-					//}
-				}else{
-					System.out.println("You haven't even seen your hand yet... How can you know what to hold?");
-					break;
-				}
-				
-				for(int i = 0; i < toDiscard.length; i++){
-					if(toDiscard[i] == 1){
-						hand.replace(i);
-					}
-				}
-
-				//hand.rigHand(new int[]{0, 9, 10, 11, 12}, new int[]{0, 0, 0, 0, 0});
-				
-				hand.sort();
-				System.out.println(hand);
-				int handVal = hand.isCombination();
-				
-				
-				if(handVal == 0){
-					
-					System.out.println("You lost and now your credit is " + credit + ".");
-				}else if(handVal == 1){
-					
-					System.out.println("You won with a pair and now your credit is " + credit + "!");
-				}else if(handVal == 2){
-					
-					System.out.println("You won with two pairs and now your credit is " + credit + "!");
-				}else if(handVal == 3){
-					
-					System.out.println("You won with a trio and now your credit is " + credit + "!");
-				}else if(handVal == 4){
-					
-					System.out.println("You won with a straight and now your credit is " + credit + "!");
-				}else if(handVal == 5){
-					
-					System.out.println("You won with a flush and now your credit is " + credit + "!");
-				}else if(handVal == 6){
-					
-					System.out.println("You won with a full house and now your credit is " + credit + "!");
-				}else if(handVal == 7){
-					
-					System.out.println("You won with four of a kind and now your credit is " + credit + "!");
-				}else if(handVal == 8){
-					
-					System.out.println("You won with four of a kind and now your credit is " + credit + "!");
-				}else if(handVal == 9){
-					
-					System.out.println("You won with four aces and now your credit is " + credit + "!");
-				}else if(handVal == 10){
-					
-					System.out.println("You won with a straight flush and now your credit is " + credit + "!");
-				}else if(handVal == 11){
-					
-					System.out.println("You won with a royal flush and now your credit is " + credit + "!");
-				}
-				
-				state = 0;
-				break;
-				
-			case 'a':
-				
-				break;
-				
-			case 's':
-				
-				break;
-				
-			case 'q':
-				if(state == 0){
-					state = hasQuit;
-					System.out.println("Thank you for playing!");
-				}else{
-					System.out.println("You can't quit now. You're locked here with me.");
-				}
-				break;
-				
-			default:
-				System.out.println("Invalid command. Please choose from the list:");
-			}
-		}
-		
-		//We need to close the reader at the end.
-		reader.close();
-		
 	}
-
 }
