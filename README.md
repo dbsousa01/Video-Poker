@@ -2,6 +2,7 @@
 An Object Oriented Programming project done in Java. A Double Bonus 10/7 Video poker game implementation
 
 It has 3 different modes:
+
 [interactive]:
 
 -i [credit] : play the game normally.
