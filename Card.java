@@ -33,27 +33,23 @@ public class Card implements Comparable<Card>{
 	
 	
 	public Card(int val, int suit){
-	
 		this.value = val;
 		this.suit = suit;
 	}
 	
 	
 	public int getSuit(){
-		
 		return this.suit;
 	}
 	
 	
 	public int getValue(){
-		
 		return this.value;
 	}
 
 
 	@Override
 	public String toString() {
-		
 		return values[value] + suits[suit];
 	}
 	

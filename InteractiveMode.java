@@ -32,7 +32,7 @@ public class InteractiveMode extends GameMode {
 						hand = new Hand(deck, handSize);
 						//hand.sort();
 					}
-					/* estes prints so ocupam espaço no programa.
+					/* estes prints so ocupam espaço no programa. Não são precisos, too cluttered
 					System.out.println("What will you do?");
 					
 					//Showing the player messages to guide him through the game

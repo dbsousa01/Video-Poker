@@ -118,7 +118,7 @@ public class Score {
 			break;
 			
 		case 7:
-			type_hand = "Low four of a kind";
+			type_hand = "Low Four of a kind";
 			stats[6]++;
 			
 			if(bet == 1){

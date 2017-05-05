@@ -1,4 +1,3 @@
-
 package group18;
 
 public class Main{
@@ -22,7 +21,7 @@ public class Main{
 		}else{
 			System.out.println("Not enough arguments. Usage -mode arguments. Can be:");
 			System.out.println("-i [credits] -> interactive");
-			System.out.println("-d [file]    -> debug");
+			System.out.println("-d [files.txt]    -> debug");
 			System.out.println("-s           -> simulation");
 			System.exit(-1);;
 		}
