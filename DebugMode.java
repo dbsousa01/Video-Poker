@@ -21,7 +21,7 @@ public class DebugMode extends GameMode{
 	Integer[] holdUser = new Integer[5];
 	Integer [] holdList = new Integer[5];
 	 
-	public DebugMode(String[] args){
+	DebugMode(String[] args){
 		super(args);
 		if(args.length <4){
 			System.out.println("Not enough arguments.");
@@ -42,7 +42,7 @@ public class DebugMode extends GameMode{
 			input = new Scanner(file_cmd);
 			
 			while(input.hasNextLine()){ //Reads all lines of the file
-				String[] line = input.nextLine().toLowerCase().split(" ");//Separates all chars from a line
+				String[] line = input.nextLine().toLowerCase().split("\\s+");//Separates all chars from a line
 				for(String s:line){
 					play.addLast(s); //Adds the char to the linked list.
 				}
@@ -54,7 +54,7 @@ public class DebugMode extends GameMode{
 			input = new Scanner(file_cmd);
 			
 			while(input.hasNextLine()){ //Reads all lines of the file
-				String[] line_card = input.nextLine().split(" ");//Separates all chars from a line
+				String[] line_card = input.nextLine().split("\\s+");//Separates all chars from a line
 				for(String s:line_card){
 					for(i=0;i<values.length;i++){ //i has the card number
 						if(values[i].equals(s.substring(0,1)))
@@ -85,13 +85,12 @@ public class DebugMode extends GameMode{
 		
 		Integer userBet = 0;
 		int betted = 0;
+		int delt= 0;
 		int aux, i;
 		Integer backup = 0;
 		int[] vals = new int[5];
 		int[] suits = new int[5];
 		state = 4;
-		
-		
 		
 		while(itr.hasNext() && state == 4){ //Parses through the linked list of plays
 			userInput = reader.nextLine().toLowerCase().split(" "); // reads input user
@@ -138,7 +137,7 @@ public class DebugMode extends GameMode{
 					}
 					break;
 				case 'h':
-					if(!(itr.next().equals("h")) || userInput.length > 7){
+					if(!(itr.next().equals("h")) || userInput.length > 7 || delt==0){
 						System.out.println("Unexpected Input. Try Again.");
 						itr.previous();
 						break;
@@ -210,6 +209,7 @@ public class DebugMode extends GameMode{
 					}
 					hand.rigHand(vals, suits); //Creates a hand with the cards wanted
 					System.out.println("player's hand " + hand);
+					delt = 1;
 					break;
 				case '$':
 					if(!(itr.next().equals("$")) || userInput.length > 2){
@@ -219,7 +219,7 @@ public class DebugMode extends GameMode{
 						Show_credit();
 					break;
 				case 'a':
-					if(!(itr.next().equals("a"))|| userInput.length > 2){
+					if(!(itr.next().equals("a"))|| userInput.length > 2 || delt == 0){
 						System.out.println("Unexpected Input. Try Again");
 						itr.previous();
 						break;
