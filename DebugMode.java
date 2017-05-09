@@ -112,10 +112,6 @@ public class DebugMode extends GameMode{
 						}
 						previousBet = bet;
 					}catch(NumberFormatException e){
-						if(betted == 2){
-							System.out.println("b:Illegal command");
-							break;
-						}
 						bet = previousBet;
 						itr.previous(); //goes back on the list
 					}

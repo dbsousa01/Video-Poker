@@ -17,6 +17,8 @@ public class Main{
 				game = new DebugMode(args);
 			}else if(args[0].equals("-s")){
 				game = new SimulationMode(args);
+			}else if(args[0].equals("-g")){
+				game = new UiMode(args);
 			}
 		}else{
 			System.out.println("Not enough arguments. Usage -mode arguments. Can be:");

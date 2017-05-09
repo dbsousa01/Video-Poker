@@ -1,13 +1,10 @@
 package group18;
 
-import java.util.Arrays;
-
 public class InteractiveMode extends GameMode {
 
-	public InteractiveMode(String[] args){
+	InteractiveMode(String[] args){
 		super(args);
 	}
-	
 	
 	public void runner(String[] args, Score score){
 		System.out.println("You chose the interactive mode with "+credit+ " credit");
@@ -92,51 +89,11 @@ public class InteractiveMode extends GameMode {
 						break;
 						
 					case 'h':
-						if(state == 2){
-							//Creating the toDiscard array that will be used for the "hold" function
-							toDiscard = new int[hand.length()];
-							Arrays.fill(toDiscard, 1);
-							
-							for(String aux: userInput){
-								if(!aux.equals("h")){
-									toHold = Integer.parseInt(aux);
-									if(toHold >= 1 && toHold <= 5){
-										toDiscard[toHold - 1] = 0;
-									}else{
-										System.out.println("Invalid value, please choose cards from those in hand [1 - 5].");
-										state = 3;
-										break;
-									}
-								}
-							}
-							
-							if(state == 3){
-								state = 2;
-								break;
-							}
-						}else{
-							System.out.println("h: ilegal command");
-							break;
-						}
-						
-						for(int i = 0; i < toDiscard.length; i++){
-							if(toDiscard[i] == 1){
-								hand.replace(i);
-							}
-						}
-						//hand.sort();
-
-						System.out.println("player's hand " + hand);
-						//hand.rigHand(new int[]{10, 11, 12, 9, 0}, new int[]{0, 0, 0, 0, 0});
-						hand.sort();
-						
-						credit = score.result(hand, bet, credit);
-						
-						state = 0;
+						hold(score,hand);
 						break;
 						
 					case 'a':
-						
+						System.out.println("Listen here mate");
 						break;
 						
 					case 's':
