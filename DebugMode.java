@@ -84,7 +84,7 @@ public class DebugMode extends GameMode{
 		ListIterator<Card> card_itr = cards.listIterator();
 		
 		Integer userBet = 0;
-		int betted = 0;
+		int betted = 2;
 		int delt= 0;
 		int aux, i;
 		Integer backup = 0;
@@ -137,9 +137,13 @@ public class DebugMode extends GameMode{
 					}
 					break;
 				case 'h':
-					if(!(itr.next().equals("h")) || userInput.length > 7 || delt==0){
+					if(!(itr.next().equals("h")) || userInput.length > 7){
 						System.out.println("Unexpected Input. Try Again.");
 						itr.previous();
+						break;
+					}
+					if(delt==0){
+						System.out.println("h: Illegal command");
 						break;
 					}
 					cleanVectors();
@@ -199,6 +203,10 @@ public class DebugMode extends GameMode{
 						itr.previous();
 						break;
 					}
+					if(betted == 2){
+						System.out.println("d: Illegal command");
+						break;
+					}
 					if(betted == 0 && score.getPlays() != 0){
 						bet(previousBet); //if b is not written before d, we bet previous bet 
 					}
@@ -219,9 +227,13 @@ public class DebugMode extends GameMode{
 						Show_credit();
 					break;
 				case 'a':
-					if(!(itr.next().equals("a"))|| userInput.length > 2 || delt == 0){
+					if(!(itr.next().equals("a"))|| userInput.length > 2){
 						System.out.println("Unexpected Input. Try Again");
 						itr.previous();
+						break;
+					}
+					if(delt == 0){
+						System.out.println("a: Illegal command");
 						break;
 					}
 					//Print the advice
