@@ -21,12 +21,11 @@ public class InteractiveMode extends GameMode {
 					if(state == 0){
 						//For each new play, we need to open a new deck
 						//Then we need to shuffle the deck
-						deck = new Deck();
-						deck.shuffle();
+
 						
 						//now we create the initial player's hand and the 5 replacement cards,
 						//that will be used to replace the cards chosen by the player.
-						hand = new Hand(deck, handSize);
+						createDeck();
 						//hand.sort();
 					}
 					/* estes prints so ocupam espaço no programa. Não são precisos, too cluttered

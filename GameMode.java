@@ -50,12 +50,13 @@ public abstract class GameMode {
 			System.out.println("Wrong input, exiting");
 			System.exit(1);
 		}
+	}
+	public void createDeck(){
 		deck = new Deck();
 		deck.shuffle();
 		
 		hand = new Hand(deck, handSize);
 	}
-	
 	public void Show_credit(){
 		System.out.println("Your credit is " + credit);
 	}
