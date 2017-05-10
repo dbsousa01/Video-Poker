@@ -4,7 +4,7 @@ public class SimulationMode extends GameMode{
 	int bet;
 	int nbdeals;
 
-	public SimulationMode(String[] args) {
+	SimulationMode(String[] args) {
 		// TODO Auto-generated constructor stub
 		super(args);
 		bet = Integer.parseInt(args[2]);

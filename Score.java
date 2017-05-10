@@ -16,7 +16,6 @@ public class Score {
 	int[] stats = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //{Jacks or better, Two pairs, Three of a kind, Straight, Flush, Full house, 4 of a kind, Straight flush, Royal flush, other <- what does this mean?}
 	int plays = 0;
 	
-	
 	public void printStats(int iniCredit, int credit){
 
 		System.out.println("\nHand            nb");
@@ -119,7 +118,7 @@ public class Score {
 			break;
 			
 		case 7:
-			type_hand = "Low four of a kind";
+			type_hand = "Low Four of a kind";
 			stats[6]++;
 			
 			if(bet == 1){
@@ -232,14 +231,6 @@ public class Score {
 		
 		return credit;
 	}
-	
-	
-	
-	
-	//public int[] strategy(Hand hand){
-		
-		//return new int[]{0 0};
-	//}
 }
 
 	

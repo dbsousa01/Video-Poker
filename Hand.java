@@ -28,17 +28,14 @@ public class Hand {
 		for(int i = 0; i < handSize; i++){
 			aux = aux + cards[i] + " ";
 		}
-		
 		return aux;
 	}
 	
 	public int length(){
-		
 		return handSize;
 	}
 	
 	public void replace(int index){
-		
 		if(index > handSize){
 			System.out.println("Card out of range. The hand only has " + handSize);
 		}else{
@@ -46,8 +43,15 @@ public class Hand {
 		}
 	}
 	
+	public void replace(int index, Card card){
+		if(index > handSize){
+			System.out.println("Card out of range. The hand only has " + handSize);
+		}else{
+			cards[index] = card;
+		}
+	}
+	
 	public void sort(){
-		
 		Arrays.sort(this.cards);
 	}
 	
@@ -131,7 +135,7 @@ public class Hand {
 		Integer counter=1;
 		Integer value=0;
 		if(opt==0){
-			if(this.cards[1].getValue() != this.cards[3].getValue()) //quando era full house dava porcaria(esparguete)
+			if(this.cards[1].getValue() != this.cards[3].getValue()) //Check if maybe it is a full house
 				return 0;
 			for(i=0;i<this.length()-1;i++){
 				if(this.cards[i].getValue()==this.cards[i+1].getValue()){
@@ -162,7 +166,7 @@ public class Hand {
 	}
 	
 	
-	public int isFullHouse(){ //isto está um bocado hardcoded lol
+	public int isFullHouse(){
 		int i;
 		
 		if(this.cards[0].getValue()==this.cards[1].getValue()){
@@ -182,7 +186,6 @@ public class Hand {
 		}
 		return 0;
 	}
-	
 	
 	public int isNPair(){
 		Integer counter=0;
@@ -232,7 +235,6 @@ public class Hand {
 		for(int i =0; i< handSize;i++){
 			this.cards[i] = new Card(vals[i], suits[i]);
 		}
-		
 		return;
 	}
 }
