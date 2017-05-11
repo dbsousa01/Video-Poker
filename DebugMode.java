@@ -91,13 +91,15 @@ public class DebugMode extends GameMode{
 		 * 	Both lists are iterated and its content is used 
 		 * to play a normal game.
 		 * 	Implemented a switch case to avoid errors and to 
-		 * adapt depending on what the file has.
+		 * adapt depending on what the file has. Even if the input is the
+		 * correct one, it might not be the correct one, depending on
+		 * the previous state.
 		 */
 		ListIterator<String> itr = play.listIterator();
 		ListIterator<Card> card_itr = cards.listIterator();
 		
 		int betted = 2;
-		int delt= 0;
+		int dealt= 0;
 		int out = 0;
 		int aux, i;
 		
@@ -160,7 +162,7 @@ public class DebugMode extends GameMode{
 						break;
 					}
 				}
-				if(delt==0){
+				if(dealt==0){
 					System.out.println("\n"+ holdhands);
 					System.out.println("h: Illegal command");
 					break;
@@ -176,7 +178,7 @@ public class DebugMode extends GameMode{
 						}catch(IndexOutOfBoundsException e){ //Card list is empty
 							System.out.println("Something went terribly wrong!");
 							System.exit(-1);
-						}catch(NoSuchElementException e){
+						}catch(NoSuchElementException e){ //not enough cards on the file
 							System.out.println("Something went terribly wrong!");
 							System.exit(-1);
 						}
@@ -203,7 +205,7 @@ public class DebugMode extends GameMode{
 				}
 				hand.rigHand(vals, suits); //Creates a hand with the cards wanted
 				System.out.println("player's hand " + hand);
-				delt = 1;
+				dealt = 1;
 				state = 2;
 				break;
 			case "$":
@@ -212,7 +214,7 @@ public class DebugMode extends GameMode{
 				break;
 			case "a":
 				System.out.println("\n-cmd a");
-				if(delt == 0){ //only prints the advice if the cards have been delt
+				if(dealt == 0){ //only prints the advice if the cards have been dealt
 					System.out.println("a: Illegal command");
 					break;
 				}
