@@ -3,8 +3,8 @@ package group18;
 public class Card implements Comparable<Card>{
 	
 	//Macros
-	private final static String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"};
-	private final static String[] suits = {"S", "C", "D", "H"};
+	final static String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"};
+	final static String[] suits = {"S", "C", "D", "H"};
 	
 	// Kinds of suits
     public final static int SPADES   = 0;
@@ -33,27 +33,27 @@ public class Card implements Comparable<Card>{
 	
 	
 	public Card(int val, int suit){
-	
 		this.value = val;
 		this.suit = suit;
 	}
 	
 	
 	public int getSuit(){
-		
 		return this.suit;
 	}
 	
 	
 	public int getValue(){
-		
 		return this.value;
 	}
-
+	
+	public String getName(){
+		
+		return values[this.getValue()];
+	}
 
 	@Override
 	public String toString() {
-		
 		return values[value] + suits[suit];
 	}
 	
@@ -77,6 +77,27 @@ public class Card implements Comparable<Card>{
 			return true;
 		else
 			return false;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (!(obj instanceof Card)) {
+			return false;
+		}
+		Card other = (Card) obj;
+		if (suit != other.suit) {
+			return false;
+		}
+		if (value != other.value) {
+			return false;
+		}
+		return true;
 	}
 
 	//Necessary when implementing Comparable<T>
