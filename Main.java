@@ -1,6 +1,6 @@
 package group18;
 
-public class Main {
+public class Main{
 
 	public static void main(String[] args) {
 	
@@ -17,13 +17,15 @@ public class Main {
 				game = new DebugMode(args);
 			}else if(args[0].equals("-s")){
 				game = new SimulationMode(args);
+			}else if(args[0].equals("-g")){
+				game = new UiMode(args);
 			}
 		}else{
 			System.out.println("Not enough arguments. Usage -mode arguments. Can be:");
 			System.out.println("-i [credits] -> interactive");
-			System.out.println("-d [file]    -> debug");
+			System.out.println("-d [files.txt]    -> debug");
 			System.out.println("-s           -> simulation");
-			System.exit(-1);
+			System.exit(-1);;
 		}
 		
 		game.runner(args, score);
@@ -51,7 +53,7 @@ public class Main {
 		 * 		-advice						*
 		 * 		-statistics					*
 		 ************************************/
-
+		
 		
 		/********************************************************************************************************
 		*Starting the interface with the player.																*
@@ -59,7 +61,7 @@ public class Main {
 		*Use:	b: bet the same as the last bet or 5 tokens, if there is no previews bet;						*
 		*		b i: bet i tokens.																				*
 		*																										*
-		*$ - Show the amount of tokens the player has															*
+		*$ - Show the amount of tokens the player has														*
 		*																										*
 		*d - Deal the cards. Can only be used in the beginning of a round, after the bet.						*
 		*																										*
@@ -70,9 +72,9 @@ public class Main {
 		*																										*
 		*a - Asks the computer for the "perfect" strategy.														*
 		*																										*
-		*s - Prints the statistics of the current game.															*
-		*																										*
-		*q - Quit the game																						*
+		*s - Prints the statistics of the current game.		
+		*
+		*q - Quit the game													*
 		********************************************************************************************************/
 	}
 }
