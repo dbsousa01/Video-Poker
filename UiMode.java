@@ -1,6 +1,7 @@
 package group18;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SpringLayout;
@@ -29,7 +31,6 @@ public class UiMode extends GameMode{
 	//Panels
 	JPanel onpanel;
 	JPanel cardPanel;
-	
 	SpringLayout layout;
 	
 	//Text caught
@@ -37,7 +38,6 @@ public class UiMode extends GameMode{
 	String textBet;
 	
 	//Buttons
-	JButton statsButton;
 	JToggleButton[] holdArray;
 	JButton[] mainButtons;
 	
@@ -52,8 +52,13 @@ public class UiMode extends GameMode{
 	JTextField adviceText;
 	JTextField result;
 	
+	//Areas
+	JTextArea stats;
+	
 	//Images
 	private Image cback;
+	
+	String betString;
 	
 	public UiMode(String[] args){
 		super(args);
@@ -108,11 +113,11 @@ public class UiMode extends GameMode{
 		
         playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event){
-				textCredit = credit_text.getText();
+				textCredit = credit_text.getText().trim();
 				try{
 					credit = Integer.parseInt(textCredit);
-					if(credit.equals(0)){
-						System.out.println("Credit is zero.");
+					if(credit.equals(0) || credit < 0){
+						System.out.println("Credit is invalid.");
 						return;
 					}
 					updateCredit();
@@ -128,7 +133,6 @@ public class UiMode extends GameMode{
 	
 	public void placeMain(){
 		layout = new SpringLayout();
-		statsButton = new JButton("Statistics");
 		Container contentPane;
 		
 		mainFrame = new JFrame("Video Poker");
@@ -150,15 +154,12 @@ public class UiMode extends GameMode{
 		layout.putConstraint(SpringLayout.WEST,credit_disp,10,SpringLayout.EAST,creditLabel);
 		layout.putConstraint(SpringLayout.NORTH,credit_disp,20,SpringLayout.NORTH,contentPane);
 		
-		contentPane.add(statsButton);
-		layout.putConstraint(SpringLayout.WEST,statsButton,30,SpringLayout.WEST,contentPane);
-		layout.putConstraint(SpringLayout.NORTH,statsButton,15,SpringLayout.NORTH, contentPane);
-		
 		result = new JTextField("This will print the player's result. Did he lose? Did he win?");
 		result.setEditable(false);
 		result.setVisible(false);
+		result.setSize(100, 20);
 		contentPane.add(result);
-		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER,result,320,SpringLayout.EAST,statsButton);
+		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER,result,420,SpringLayout.EAST,contentPane);
 		layout.putConstraint(SpringLayout.NORTH,result,20,SpringLayout.NORTH,contentPane);
 		
 	}
@@ -178,12 +179,20 @@ public class UiMode extends GameMode{
 		layout.putConstraint(SpringLayout.NORTH,cards[0],100,SpringLayout.NORTH,cardContainer);
 		layout.putConstraint(SpringLayout.NORTH,holdArray[0],10,SpringLayout.SOUTH,cards[0]);
 		layout.putConstraint(SpringLayout.WEST,holdArray[0],115,SpringLayout.WEST,cardContainer);
+		holdArray[0].setEnabled(false);
 		for(i=1;i<cards.length;i++){
 			layout.putConstraint(SpringLayout.WEST,cards[i],40,SpringLayout.EAST,cards[i-1]);
 			layout.putConstraint(SpringLayout.NORTH,cards[i],100,SpringLayout.NORTH,cardContainer);
 			layout.putConstraint(SpringLayout.NORTH,holdArray[i],10,SpringLayout.SOUTH,cards[i]);
 			layout.putConstraint(SpringLayout.WEST,holdArray[i],130,SpringLayout.WEST,holdArray[i-1]);
+			holdArray[i].setEnabled(false);
 		}
+		stats = new JTextArea("");
+		stats.setEditable(false);
+		stats.setPreferredSize(new Dimension(220,320));
+		cardContainer.add(stats);
+		layout.putConstraint(SpringLayout.WEST,stats,120,SpringLayout.WEST,cards[i-1]);
+		layout.putConstraint(SpringLayout.NORTH,stats,100,SpringLayout.NORTH,cardContainer);
 	}
 	
 	public void placeButtons(){
@@ -210,19 +219,98 @@ public class UiMode extends GameMode{
 		for(i =1;i<mainButtons.length-1;i++){
 			layout.putConstraint(SpringLayout.WEST,mainButtons[i],(i*130),SpringLayout.WEST,bet_text);
 			layout.putConstraint(SpringLayout.NORTH,mainButtons[i],330,SpringLayout.NORTH,buttonContainer);
+			mainButtons[i].setEnabled(false);
 		}
 		layout.putConstraint(SpringLayout.SOUTH,mainButtons[i],100,SpringLayout.SOUTH,mainButtons[i-1]);
-		layout.putConstraint(SpringLayout.WEST,mainButtons[i],100,SpringLayout.WEST,buttonContainer);
+		layout.putConstraint(SpringLayout.WEST,mainButtons[i],110,SpringLayout.WEST,buttonContainer);
 		layout.putConstraint(SpringLayout.WEST,adviceText,90,SpringLayout.WEST,mainButtons[i]);
 		layout.putConstraint(SpringLayout.NORTH,adviceText,435,SpringLayout.NORTH,buttonContainer);
+		mainButtons[i].setEnabled(false);
 	}
 	
 	public void setButtons(Score score){
-		 statsButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent event){
-					score.printStats(Integer.parseInt(textCredit), credit);
+		mainButtons[0].addActionListener(new ActionListener(){ //bet button
+			 public void actionPerformed(ActionEvent event){
+				 	betString = "b "+bet_text.getText();
+				 	userInput = betString.trim().split("\\s+");
+					bet();
+					updateCredit();
+					result.setVisible(false);
+					mainButtons[0].setEnabled(false);
+					bet_text.setEnabled(false);
+					mainButtons[2].setEnabled(true);
+					adviceText.setText("");
 				}
 			});
+		mainButtons[1].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event){
+				String hold = new String("h");
+				for(int i =0;i<holdArray.length;i++){
+					if(holdArray[i].isSelected()){
+						hold += " "+(i+1);
+						holdArray[i].doClick();
+					}
+					holdArray[i].setEnabled(false);
+				}
+				System.out.println(hold);
+				userInput = hold.trim().split("\\s+");
+				hold(score,hand);
+				mainButtons[3].setEnabled(false);
+				updateCredit();
+				updateImageHand();
+				result.setText(score.output);
+				result.setVisible(true);
+				mainButtons[1].setEnabled(false);
+				mainButtons[0].setEnabled(true);
+				mainButtons[2].setEnabled(true);
+				adviceText.setText("");
+				bet_text.setEnabled(true);
+				score.printStats(Integer.parseInt(textCredit), credit);
+				stats.setText(score.result);
+			}
+		});
+		
+		mainButtons[2].addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event){
+				createDeck();
+				if(state == 0 && score.getPlays() != 0){
+					mainButtons[0].setEnabled(false);
+					bet_text.setEnabled(false);;
+					bet(previousBet);
+					updateCredit();
+					result.setVisible(false);;
+					adviceText.setText("");
+					state = 1;
+				}
+				System.out.println("player's hand: " + hand);
+				
+				updateImageHand();
+				mainButtons[1].setEnabled(true);
+				mainButtons[2].setEnabled(false);
+				mainButtons[3].setEnabled(true);
+				state = 2;
+			}
+		});
+		mainButtons[3].addActionListener(new ActionListener() { //stats button
+			public void actionPerformed(ActionEvent event){
+				adviceText.setText("player should "+sortString(Advice.getAdvice(hand)));
+			}
+		});
+	}
+	
+	public void updateImageHand(){
+		Image[] cards = new Image[5];
+		for(int i = 0;i<holdArray.length;i++){
+			try{
+				cards[i] = ImageIO.read(getClass().getResource("/Cards/"+
+			Card.suits[hand.cards[i].getSuit()]+
+			Card.values[hand.cards[i].getValue()]+".png"));
+			}catch(IOException e){
+				e.printStackTrace();
+			}
+			handLabel[i].setIcon(new ImageIcon(cards[i].getScaledInstance(Cardpxx,Cardpxy,Image.SCALE_SMOOTH)));
+			holdArray[i].setEnabled(true);
+		}
 	}
 	
 	public void updateCredit(){
@@ -244,8 +332,5 @@ public class UiMode extends GameMode{
 			}
 		}
 		setButtons(score);
-		while(true){ //main cycle
-			
-		}
 	}
 }

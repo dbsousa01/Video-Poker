@@ -15,10 +15,22 @@ public class Score {
 	//Variables
 	int[] stats = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //{Jacks or better, Two pairs, Three of a kind, Straight, Flush, Full house, 4 of a kind, Straight flush, Royal flush, other <- what does this mean?}
 	int plays = 0;
+	String output;
+	String result;
 	
 	public void printStats(int iniCredit, int credit){
-
-		System.out.println("\nHand            nb");
+		
+		result = "\nHand            nb\n______________________\n\nJacks or better  "+stats[0]
+				+"\nTwo pairs        "+stats[1]+"\nThree of a kind  "+stats[2]+"\nStraight         "
+				+stats[3]+"\nFlush            "+stats[4]+"\nFull house       "+stats[5]
+				+"\nFour of a kind   "+stats[6]+"\nStraight flush   "+stats[7]
+				+"\nRoyal flush      "+stats[8]+"\nOther            "+stats[9]
+				+"\n______________________\n\nTotal            "+plays
+				+"\n______________________"+"\n\nCredit        "+credit+" "
+				+"("+((credit*100)/iniCredit) + "%)";
+		
+		System.out.println(result);
+		/*System.out.println("\nHand            nb");
 		System.out.println("______________________");
 		System.out.println("\nJacks or better  " + stats[0]);
 		System.out.println("Two pairs        " + stats[1]);
@@ -34,7 +46,7 @@ public class Score {
 		System.out.println("\nTotal            " + plays);
 		System.out.println("______________________");
 		System.out.println("\nCredit        " + credit + " " + ((credit*100)/iniCredit) + "%");
-		
+		*/
 	}
 	
 	
@@ -44,11 +56,11 @@ public class Score {
 	
 	public int result(Hand hand, int bet, int credit){
 	
-		String type_hand = "";
+		String type_hand = new String();
 		
 		plays++;
 		
-		switch( hand.isCombination() ){
+		switch(hand.isCombination() ){
 		case 11:
 			type_hand = "Royal Flush";
 			stats[8]++;
@@ -223,12 +235,13 @@ public class Score {
 			break;
 			
 		default:
-			System.out.println("You lost and your credit is " + credit + ".");
+			stats[9]++;
+			output = "player lost";
+			System.out.println("player lost and your credit is " + credit + ".");
 			return credit;
 		}
-		
-		System.out.println("You won with a " + type_hand + " and now your credit is " + credit + "!");
-		
+		output = "player won with a "+type_hand;
+		System.out.println("player won with a " + type_hand + " and now your credit is " + credit + "!");
 		return credit;
 	}
 }

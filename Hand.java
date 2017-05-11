@@ -6,8 +6,8 @@ import java.util.Arrays;
 public class Hand {
 	
 	//Class variables
-	private Card[] cards;
-	private Card[] replacement;
+	Card[] cards;
+	Card[] replacement;
 	int handSize;
 	
 	
@@ -21,6 +21,25 @@ public class Hand {
 			this.replacement[i] = deck.drawCard();
 		}
 	}
+	
+	public Card[] getCards(){
+		return this.cards;
+	}
+	
+	public Card getCardAt(int i){
+		return this.cards[i];
+	}
+	
+	
+	public int isInHand(Card card){
+		for(int i = 0; i < this.length(); i++){
+			if(card.equalsValue(this.getCardAt(i)) && card.equalsSuit(this.getCardAt(i))){
+				return i+1;
+			}
+		}
+		return 0;
+	}
+	
 	@Override
 	public String toString() {
 		String aux = "";

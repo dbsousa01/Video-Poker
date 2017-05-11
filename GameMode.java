@@ -42,23 +42,27 @@ public abstract class GameMode {
 		}
 		try{
 			credit = Integer.parseInt(args[1]);
-			if(credit == 0){
-				System.out.println("Error, credit is zero.");
+			if(credit == 0 || credit < 0){
+				System.out.println("Error.");
 				System.exit(0);
 			}
 		}catch(NumberFormatException ex){
 			System.out.println("Wrong input, exiting");
 			System.exit(1);
 		}
+		
+		createDeck();
 	}
+	
 	public void createDeck(){
 		deck = new Deck();
 		deck.shuffle();
 		
 		hand = new Hand(deck, handSize);
 	}
+	
 	public void Show_credit(){
-		System.out.println("Your credit is " + credit);
+		System.out.println("player's credit is " + credit);
 	}
 	
 	public void bet(int amount){
@@ -72,7 +76,7 @@ public abstract class GameMode {
 		}
 		
 		credit -= bet;
-		System.out.println("You bet " + bet);
+		System.out.println("player is betting " + bet);
 	}
 	
 	//method that checks if the user can bet and bets it if it is the case
@@ -87,6 +91,7 @@ public abstract class GameMode {
 					bet = Integer.parseInt(userInput[1]);
 				}catch(NumberFormatException ex){
 					System.out.println("Not a valid number");
+					return;
 				}
 				if(bet < 1 || bet > 5){
 					System.out.println(userInput[0] + " Illegal amount.");
@@ -120,6 +125,8 @@ public abstract class GameMode {
 		}
 	}
 	public void hold(Score score, Hand handi){
+		Deck deck = new Deck();
+		Hand sorted = new Hand(deck, handi.length());
 		if(state == 2){
 			//Creating the toDiscard array that will be used for the "hold" function
 			toDiscard = new int[handi.length()];
@@ -143,7 +150,7 @@ public abstract class GameMode {
 				return;
 			}
 		}else{
-			System.out.println("h: ilegal command");
+			System.out.println("h: illegal command");
 			return;
 		}
 		
@@ -156,11 +163,24 @@ public abstract class GameMode {
 
 		System.out.println("player's hand " + handi);
 		//hand.rigHand(new int[]{10, 11, 12, 9, 0}, new int[]{0, 0, 0, 0, 0});
-		handi.sort();
+		sorted.rigHand(new int[]{handi.getCardAt(0).getValue() ,  handi.getCardAt(1).getValue(), handi.getCardAt(2).getValue(), handi.getCardAt(3).getValue(), handi.getCardAt(4).getValue()}, new int[]{handi.getCardAt(0).getSuit() ,  handi.getCardAt(1).getSuit(), handi.getCardAt(2).getSuit(), handi.getCardAt(3).getSuit(), handi.getCardAt(4).getSuit()});
 		
-		credit = score.result(handi, bet, credit);
+		sorted.sort();
+		credit = score.result(sorted, bet, credit);
 		
 		state = 0;
+	}
+	
+	public String sortString(String s){
+		String[] array = new String[s.length()-1];
+		
+		for(int i=0;i<array.length;i++){
+			array[i] = new String();
+		}
+		array = s.split("\\s+");
+		Arrays.sort(array,1,array.length);
+		s = String.join(" ",array);
+		return s;
 	}
 	
 	public void runner(String[] args, Score score){

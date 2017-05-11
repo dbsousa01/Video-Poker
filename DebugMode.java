@@ -93,7 +93,7 @@ public class DebugMode extends GameMode{
 		state = 4;
 		
 		while(itr.hasNext() && state == 4){ //Parses through the linked list of plays
-			userInput = reader.nextLine().toLowerCase().split(" "); // reads input user
+			userInput = reader.nextLine().toLowerCase().split("\\s+"); // reads input user
 			if(userInput.length <= 1 || !(userInput[0].equals("-cmd"))){
 				System.out.println("Wrong Input");
 			}else{
@@ -237,7 +237,7 @@ public class DebugMode extends GameMode{
 						break;
 					}
 					//Print the advice
-					System.out.println("The advice is...");
+					System.out.println("player should "+sortString(Advice.getAdvice(hand)));
 					break;
 				case 's':
 					if(!(itr.next().equals("s")) || userInput.length > 2){
