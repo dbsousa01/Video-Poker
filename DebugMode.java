@@ -100,7 +100,6 @@ public class DebugMode extends GameMode{
 		int delt= 0;
 		int out = 0;
 		int aux, i;
-		Integer backup = 0;
 		
 		int[] vals = new int[5];
 		int[] suits = new int[5];
@@ -144,13 +143,11 @@ public class DebugMode extends GameMode{
 				out = 0;
 				holdhands = "-cmd h";
 				cleanVectors();
-				backup = 1;
 				while(true){
 					try{
 						aux = Integer.parseInt(itr.next());
 						holdhands += " "+aux; 
 						this.holdList[aux-1] = 1; //card file wants to hold
-						backup++;
 					}catch(NoSuchElementException e){ //end of the list
 						break;
 					}catch(NumberFormatException e){ //not a number
@@ -189,7 +186,7 @@ public class DebugMode extends GameMode{
 				break;
 			case "d":
 				System.out.println("\n-cmd d");
-				if(state == 0 && score.getPlays() != 0){
+				if(state == 0 && score.getPlays() != 0){ //if there is no bet previously
 					bet(previousBet);
 					state = 1;
 				}else if(state != 1){
@@ -212,7 +209,7 @@ public class DebugMode extends GameMode{
 				break;
 			case "a":
 				System.out.println("\n-cmd a");
-				if(delt == 0){
+				if(delt == 0){ //only prints the advice if the cards have been delt
 					System.out.println("a: Illegal command");
 					break;
 				}
