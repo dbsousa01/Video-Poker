@@ -62,7 +62,7 @@ public class Score {
 		
 		switch(hand.isCombination() ){
 		case 11:
-			type_hand = "Royal Flush";
+			type_hand = "ROYAL FLUSH";
 			stats[8]++;
 			
 			if(bet == 1)
@@ -78,7 +78,7 @@ public class Score {
 			break;
 			
 		case 10:
-			type_hand = "Straight Flush";
+			type_hand = "STRAIGHT FLUSH";
 			stats[7]++;
 			
 			if(bet == 1)
@@ -94,7 +94,7 @@ public class Score {
 			break;
 			
 		case 9:
-			type_hand = "Four Aces";
+			type_hand = "FOUR ACES";
 			stats[6]++;
 			
 			if(bet == 1){
@@ -112,7 +112,7 @@ public class Score {
 			break;
 			
 		case 8:
-			type_hand = "High Four of a kind";
+			type_hand = "HIGH FOUR OF A KIND";
 			stats[6]++;
 			
 			if(bet == 1){
@@ -130,7 +130,7 @@ public class Score {
 			break;
 			
 		case 7:
-			type_hand = "Low Four of a kind";
+			type_hand = "LOW FOUR OF A KIND";
 			stats[6]++;
 			
 			if(bet == 1){
@@ -148,7 +148,7 @@ public class Score {
 			break;
 			
 		case 6:
-			type_hand = "Full House";
+			type_hand = "FULL HOUSE";
 			stats[5]++;
 			
 			if(bet == 1){
@@ -166,7 +166,7 @@ public class Score {
 			break;
 			
 		case 5:
-			type_hand = "Flush";
+			type_hand = "FLUSH";
 			stats[4]++;
 			if(bet == 1){
 				credit += 7;
@@ -183,7 +183,7 @@ public class Score {
 			break;
 			
 		case 4:
-			type_hand = "Straight";
+			type_hand = "STRAIGHT";
 			stats[3]++;
 			
 			if(bet == 1){
@@ -201,7 +201,7 @@ public class Score {
 			break;
 			
 		case 3:
-			type_hand = "Three of a Kind";
+			type_hand = "THREE OF A KIND";
 			stats[2]++;
 			
 			if(bet == 1){
@@ -219,7 +219,7 @@ public class Score {
 			break;
 			
 		case 2:
-			type_hand = "Two Pair";
+			type_hand = "TWO PAIR";
 			stats[1]++;
 			
 			credit += bet;
@@ -227,7 +227,7 @@ public class Score {
 			break;
 			
 		case 1:
-			type_hand = "Jacks or Better";
+			type_hand = "JACKS OR BETTER";
 			stats[0]++;
 			
 			credit += bet;
@@ -236,12 +236,12 @@ public class Score {
 			
 		default:
 			stats[9]++;
-			output = "player lost";
-			System.out.println("player lost and your credit is " + credit + ".");
+			output = "player loses";
+			System.out.println("player loses and your credit is " + credit + ".");
 			return credit;
 		}
-		output = "player won with a "+type_hand;
-		System.out.println("player won with a " + type_hand + " and now your credit is " + credit + "!");
+		output = "player wins with a "+type_hand;
+		System.out.println("player wins with a " + type_hand + " and now his credit is " + credit + "!");
 		return credit;
 	}
 }
