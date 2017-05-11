@@ -108,6 +108,10 @@ public class DebugMode extends GameMode{
 		String holdhands = new String();
 		
 		while(itr.hasNext()){ //Parses through the linked list of plays
+			if(credit == 0){
+				System.out.println("Player has no credit");
+				System.exit(0);
+			}
 			switch(itr.next()){
 			case "b":
 				try{

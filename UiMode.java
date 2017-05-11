@@ -232,6 +232,10 @@ public class UiMode extends GameMode{
 	public void setButtons(Score score){
 		mainButtons[0].addActionListener(new ActionListener(){ //bet button
 			 public void actionPerformed(ActionEvent event){
+				 if(credit == 0){
+					 System.out.println("Play has no credit");
+					 System.exit(0);
+				 }
 				 	betString = "b "+bet_text.getText();
 				 	userInput = betString.trim().split("\\s+");
 					bet();

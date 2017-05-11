@@ -11,8 +11,8 @@ public class InteractiveMode extends GameMode {
 				while(state != hasQuit){
 					
 					if(credit == 0 && state == 0){
-						System.out.println("You have no credit");
-						score.printStats(Integer.parseInt(args[1]), credit);
+						System.out.println("Player has no credit");
+						//score.printStats(Integer.parseInt(args[1]), credit);
 						break;
 					}
 					
