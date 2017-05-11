@@ -16,18 +16,24 @@ public class Score {
 	int[] stats = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; //{Jacks or better, Two pairs, Three of a kind, Straight, Flush, Full house, 4 of a kind, Straight flush, Royal flush, other <- what does this mean?}
 	int plays = 0;
 	String output;
-	String result;
+	String resultGUI;
 	
 	public void printStats(int iniCredit, int credit){
 		
-		result = "\nHand            nb\n______________________\n\nJacks or better  "+stats[0]
-				+"\nTwo pairs        "+stats[1]+"\nThree of a kind  "+stats[2]+"\nStraight         "
-				+stats[3]+"\nFlush            "+stats[4]+"\nFull house       "+stats[5]
-				+"\nFour of a kind   "+stats[6]+"\nStraight flush   "+stats[7]
-				+"\nRoyal flush      "+stats[8]+"\nOther            "+stats[9]
-				+"\n______________________\n\nTotal            "+plays
-				+"\n______________________"+"\n\nCredit        "+credit+" "
-				+"("+((credit*100)/iniCredit) + "%)";
+		resultGUI = "  Hand                        nb,  Jacks or better        "+stats[0]
+				+",  Two pairs                 "+stats[1]
+				+",  Three of a kind        "+stats[2]
+				+",  Straight                     "
+				+stats[3]+",  Flush                         "+stats[4]
+				+",  Full house                "
+				+stats[5]
+				+",  Four of a kind           "+stats[6]
+				+",  Straight flush            "+stats[7]
+				+",  Royal flush                "+stats[8]+",  Other                          "
+				+stats[9]
+				+",  Total                           "+plays
+				+",   Credit                    "+credit+" "
+				+"  ("+((credit*100)/iniCredit) + "%)";
 		
 		System.out.println("\nHand            nb");
 		System.out.println("______________________");

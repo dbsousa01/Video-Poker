@@ -1,7 +1,11 @@
 package group18;
 
 import java.util.Random;
-
+/**
+ * Class that implements a Deck, it has the number of suits on a deck
+ * and the number of cards in each suit.
+ * The Deck class is an array of cards with 52 positions(the size of a deck).
+ */
 public class Deck {
 	
 	//Macros
@@ -12,7 +16,9 @@ public class Deck {
 	private Card[] cards = new Card[numCards*suitAmount];
 	private int cardsOnDeck = 0;
 	
-	
+	/**
+	 * Constructor that initiates the deck, the 52 different cards
+	 */
 	public Deck(){
 		for(int i = 0; i < numCards; i++){
 			for(int j = 0; j < suitAmount; j++){
@@ -23,7 +29,11 @@ public class Deck {
 	}
 	
 	
-	//function that shuffles a deck
+	/**
+	 * Method that shuffles the deck based on two random numbers that
+	 * get a random position of the vector deck and change the position.
+	 * To ensure randomness, this process is repeated several times.
+	 */
 	public void shuffle(){
 		Random rand1 = new Random(); //we need two seeds to get more randomness
 		Random rand2 = new Random();
@@ -50,7 +60,10 @@ public class Deck {
 		}
 	}
 	
-	
+	/**
+	 * Method that draws a card from the top of the deck array.
+	 * @return the top card of the array
+	 */
 	public Card drawCard(){
 		int top = this.cardsOnDeck - 1;
 		

@@ -2,7 +2,13 @@ package group18;
 
 import java.util.Arrays;
 import java.util.Scanner;
-
+/**
+ * Abstract class. It represents the different game modes of the program
+ * The abstract class has variables shared by its child classes since they
+ * are used in all of them and also implements some methods that are
+ * common to these child classes. It has one abstract method, being the 
+ * main method that implements the subsequent classes
+ */
 public abstract class GameMode {
 	//Macros
 	int handSize = 5;

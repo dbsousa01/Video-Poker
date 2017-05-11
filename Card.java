@@ -1,5 +1,10 @@
 package group18;
-
+/**
+ * Class that represents a card of a deck, it has 2 arrays of strings for
+ * the value and the suit of each different card and card macros, for
+ * comparison purposes. 
+ * Each card has its own value and suit.
+ */
 public class Card implements Comparable<Card>{
 	
 	//Macros
@@ -31,22 +36,36 @@ public class Card implements Comparable<Card>{
 	private int value;
 	private int suit;
 	
-	
+	/**
+	 * 
+	 * @param val is the value of the card
+	 * @param suit is the suit of the card
+	 */
 	public Card(int val, int suit){
 		this.value = val;
 		this.suit = suit;
 	}
 	
-	
+	/**
+	 * a getter of the suit
+	 * @return the integer that corresponds the suit of the card
+	 */
 	public int getSuit(){
 		return this.suit;
 	}
 	
-	
+	/**
+	 * a getter of the value
+	 * @return the integer that corresponds the value of the card
+	 */
 	public int getValue(){
 		return this.value;
 	}
 	
+	/**
+	 * 
+	 * @return the name of the card(Ace,King, etc)
+	 */
 	public String getName(){
 		
 		return values[this.getValue()];
@@ -64,7 +83,12 @@ public class Card implements Comparable<Card>{
 		result = prime * result + value;
 		return result;
 	}
-
+	
+	/**
+	 * Compares the suit of two cards
+	 * @param card
+	 * @return true if two cards have the same suit, false otherwise
+	 */
 	public boolean equalsSuit(Card card){
 		if(this.suit==card.suit)
 			return true;
@@ -72,6 +96,11 @@ public class Card implements Comparable<Card>{
 			return false;
 	}
 
+	/**
+	 * Compares the value of two cards
+	 * @param card
+	 * @return true if two cards have the same value, false otherwise
+	 */
 	public boolean equalsValue(Card card) {
 		if(this.value==card.value)
 			return true;
@@ -100,7 +129,11 @@ public class Card implements Comparable<Card>{
 		return true;
 	}
 
-	//Necessary when implementing Comparable<T>
+	/**
+	 * Compares two cards relative to their value.
+	 * @return 1, if a card value is greater that the other, -1 if it is 
+	 * smaller or 0 if they have the same value
+	 */
 	public int compareTo(Card other){
 		if(this.value > other.value){
 			return 1;
