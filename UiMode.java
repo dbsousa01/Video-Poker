@@ -159,7 +159,7 @@ public class UiMode extends GameMode{
 		result.setVisible(false);
 		result.setSize(100, 20);
 		contentPane.add(result);
-		layout.putConstraint(SpringLayout.HORIZONTAL_CENTER,result,420,SpringLayout.EAST,contentPane);
+		layout.putConstraint(SpringLayout.WEST,result,400,SpringLayout.WEST,contentPane);
 		layout.putConstraint(SpringLayout.NORTH,result,20,SpringLayout.NORTH,contentPane);
 		
 	}
@@ -189,6 +189,7 @@ public class UiMode extends GameMode{
 		}
 		stats = new JTextArea("");
 		stats.setEditable(false);
+		stats.setVisible(false);
 		stats.setPreferredSize(new Dimension(220,320));
 		cardContainer.add(stats);
 		layout.putConstraint(SpringLayout.WEST,stats,120,SpringLayout.WEST,cards[i-1]);
@@ -266,6 +267,7 @@ public class UiMode extends GameMode{
 				adviceText.setText("");
 				bet_text.setEnabled(true);
 				score.printStats(Integer.parseInt(textCredit), credit);
+				stats.setVisible(true);
 				stats.setText(score.result);
 			}
 		});
