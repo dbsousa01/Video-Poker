@@ -24,7 +24,6 @@ public class DebugMode extends GameMode{
 	private final static String[] values = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K"};
 	private final static String[] suits = {"S", "C", "D", "H"};
 	
-	Integer[] holdUser = new Integer[5];
 	Integer [] holdList = new Integer[5];
 	 
 	DebugMode(String[] args){
@@ -37,13 +36,11 @@ public class DebugMode extends GameMode{
 		card_file = args[3];
 		
 		int i,j;
-		for(i = 0;i<holdUser.length; i++){
-			holdUser[i]= 0;
-			holdList[i]=0;
-		}
+		
+		cleanVectors();
 		try{
 			Scanner input = new Scanner(cmd_file);
-			File file_cmd = new File(input.nextLine());
+			File file_cmd = new File(input.nextLine()+".txt");
 			input.close();
 			input = new Scanner(file_cmd);
 			/**
@@ -60,12 +57,12 @@ public class DebugMode extends GameMode{
 			}
 			input.close();
 			input = new Scanner(card_file);
-			file_cmd = new File(input.nextLine());
+			file_cmd = new File(input.nextLine()+".txt");
 			input.close();
 			input = new Scanner(file_cmd);
 			
 			while(input.hasNextLine()){
-				String[] line_card = input.nextLine().trim().split("\\s+");//Separates all chars from a line
+				String[] line_card = input.nextLine().toUpperCase().trim().split("\\s+");//Separates all chars from a line
 				for(String s:line_card){
 					for(i=0;i<values.length;i++){ //i has the card number
 						if(values[i].equals(s.substring(0,1)))
@@ -85,8 +82,7 @@ public class DebugMode extends GameMode{
 		}
 	}
 	public void cleanVectors(){
-		for(int i = 0;i<holdUser.length; i++){
-			holdUser[i]= 0;
+		for(int i = 0;i<holdList.length; i++){
 			holdList[i]=0;
 		}
 	}
@@ -102,6 +98,7 @@ public class DebugMode extends GameMode{
 		
 		int betted = 2;
 		int delt= 0;
+		int out = 0;
 		int aux, i;
 		Integer backup = 0;
 		
@@ -116,6 +113,11 @@ public class DebugMode extends GameMode{
 				try{
 					bet = Integer.parseInt(itr.next()); //check if the next element is a number
 					System.out.println("\n-cmd b "+bet);
+					if(betted == 1){
+						bet = previousBet;
+						System.out.println("b: Illegal command");
+						break;
+					}
 					if(bet < 1 || bet > 5){ //Checks if it is a valid bet
 						System.out.println("b: Illegal amount.");
 						break;
@@ -132,28 +134,38 @@ public class DebugMode extends GameMode{
 				}
 				bet(bet);
 				betted = 1;
+				state = 1;
 				break;
 			case "h":
+				out = 0;
 				holdhands = "-cmd h";
-				if(delt==0){
-					System.out.println("h: Illegal command");
-					break;
-				}
 				cleanVectors();
 				backup = 1;
 				while(true){
 					try{
 						aux = Integer.parseInt(itr.next());
+						holdhands += " "+aux; 
 						this.holdList[aux-1] = 1; //card file wants to hold
 						backup++;
-						holdhands += " "+aux; 
 					}catch(NoSuchElementException e){ //end of the list
 						break;
 					}catch(NumberFormatException e){ //not a number
 						itr.previous();
 						break;
+					}catch(ArrayIndexOutOfBoundsException e){
+						System.out.println("\n"+ holdhands);
+						System.out.println("h: Invalid command");
+						out = 1;
+						break;
 					}
 				}
+				if(delt==0){
+					System.out.println("\n"+ holdhands);
+					System.out.println("h: Illegal command");
+					break;
+				}
+				if(out == 1)
+					break;
 				System.out.println("\n"+ holdhands);
 				state = 0;
 				for(i =0;i<holdList.length;i++){
@@ -173,12 +185,12 @@ public class DebugMode extends GameMode{
 				break;
 			case "d":
 				System.out.println("\n-cmd d");
-				if(betted == 2){
-					System.out.println("d: Illegal command"); //can't use d
+				if(state == 0 && score.getPlays() != 0){
+					bet(previousBet);
+					state = 1;
+				}else if(state != 1){
+					System.out.println("d: illegal command");
 					break;
-				}
-				if(betted == 0 && score.getPlays() != 0){
-					bet(previousBet); //if b is not written before d, we bet previous bet 
 				}
 				for( i=0;i<=4;i++){//parses through the card list and fills the hand
 					vals[i] = card_itr.next().getValue();
@@ -188,6 +200,7 @@ public class DebugMode extends GameMode{
 				hand.rigHand(vals, suits); //Creates a hand with the cards wanted
 				System.out.println("player's hand " + hand);
 				delt = 1;
+				state = 2;
 				break;
 			case "$":
 				System.out.println("\n-cmd $");

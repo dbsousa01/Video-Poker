@@ -29,8 +29,7 @@ public class Score {
 				+"\n______________________"+"\n\nCredit        "+credit+" "
 				+"("+((credit*100)/iniCredit) + "%)";
 		
-		System.out.println(result);
-		/*System.out.println("\nHand            nb");
+		System.out.println("\nHand            nb");
 		System.out.println("______________________");
 		System.out.println("\nJacks or better  " + stats[0]);
 		System.out.println("Two pairs        " + stats[1]);
@@ -46,7 +45,7 @@ public class Score {
 		System.out.println("\nTotal            " + plays);
 		System.out.println("______________________");
 		System.out.println("\nCredit        " + credit + " " + ((credit*100)/iniCredit) + "%");
-		*/
+		
 	}
 	
 	

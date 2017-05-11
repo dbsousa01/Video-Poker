@@ -43,7 +43,7 @@ public abstract class GameMode {
 		try{
 			credit = Integer.parseInt(args[1]);
 			if(credit == 0 || credit < 0){
-				System.out.println("Error.");
+				System.out.println("Error: Credit");
 				System.exit(0);
 			}
 		}catch(NumberFormatException ex){
@@ -102,24 +102,6 @@ public abstract class GameMode {
 			bet(bet);
 			
 			state = 1;
-		}else if(state == 4){
-			if(userInput.length > 3){
-				System.out.println("Please, choose only one value to bet: [b i]\n Try Again");
-				return;
-			}else if(userInput.length == 3){
-				try{
-					bet = Integer.parseInt(userInput[2]);
-				}catch(NumberFormatException ex){
-					System.out.println("Not a valid number");
-				}
-				if(bet < 1 || bet > 5){
-					System.out.println(userInput[1] + ": Illegal amount.");
-					bet = previousBet;
-					return;
-				}
-			}
-
-			bet(bet);
 		}else{
 			System.out.println("b: illegal command.");
 		}
