@@ -1,7 +1,6 @@
 package group18;
 
 import java.awt.Container;
-import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,7 +12,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SpringLayout;
@@ -51,9 +49,7 @@ public class UiMode extends GameMode{
 	JTextField credit_disp;
 	JTextField adviceText;
 	JTextField result;
-	
-	//Areas
-	JTextArea stats;
+	JTextField[] stats;
 	
 	//Images
 	private Image cback;
@@ -159,7 +155,7 @@ public class UiMode extends GameMode{
 		result.setVisible(false);
 		result.setSize(100, 20);
 		contentPane.add(result);
-		layout.putConstraint(SpringLayout.WEST,result,400,SpringLayout.WEST,contentPane);
+		layout.putConstraint(SpringLayout.WEST,result,300,SpringLayout.WEST,contentPane);
 		layout.putConstraint(SpringLayout.NORTH,result,20,SpringLayout.NORTH,contentPane);
 		
 	}
@@ -187,13 +183,21 @@ public class UiMode extends GameMode{
 			layout.putConstraint(SpringLayout.WEST,holdArray[i],130,SpringLayout.WEST,holdArray[i-1]);
 			holdArray[i].setEnabled(false);
 		}
-		stats = new JTextArea("");
-		stats.setEditable(false);
-		stats.setVisible(false);
-		stats.setPreferredSize(new Dimension(220,320));
-		cardContainer.add(stats);
-		layout.putConstraint(SpringLayout.WEST,stats,120,SpringLayout.WEST,cards[i-1]);
-		layout.putConstraint(SpringLayout.NORTH,stats,100,SpringLayout.NORTH,cardContainer);
+		stats = new JTextField[13];
+		stats[0] = new JTextField("Jacks or better  0         make room           ");
+		stats[0].setEditable(false);
+		stats[0].setVisible(false);
+		cardContainer.add(stats[0]);
+		layout.putConstraint(SpringLayout.WEST,stats[0],120,SpringLayout.WEST,cards[i-1]);
+		layout.putConstraint(SpringLayout.NORTH,stats[0],100,SpringLayout.NORTH,cardContainer);
+		for(i = 1;i<13;i++){
+			stats[i] = new JTextField("Jacks or better  0              make room      ");
+			stats[i].setEditable(false);
+			stats[i].setVisible(false);
+			cardContainer.add(stats[i]);
+			layout.putConstraint(SpringLayout.SOUTH,stats[i],20,SpringLayout.SOUTH,stats[i-1]);
+			layout.putConstraint(SpringLayout.WEST,stats[i],740,SpringLayout.WEST,cardContainer);
+		}
 	}
 	
 	public void placeButtons(){
@@ -270,9 +274,7 @@ public class UiMode extends GameMode{
 				mainButtons[2].setEnabled(true);
 				adviceText.setText("");
 				bet_text.setEnabled(true);
-				score.printStats(Integer.parseInt(textCredit), credit);
-				stats.setVisible(true);
-				stats.setText(score.result);
+				updateStats(score);
 			}
 		});
 		
@@ -303,7 +305,19 @@ public class UiMode extends GameMode{
 			}
 		});
 	}
-	
+	public void updateStats(Score score){
+		String[] resultText = new String[13];
+		score.printStats(Integer.parseInt(textCredit), credit);
+		
+		for(int i= 0;i<resultText.length;i++){
+			resultText[i] = new String();
+		}
+		resultText = score.resultGUI.split(",");
+		for(int i= 0;i<resultText.length;i++){
+			stats[i].setText(resultText[i]);
+			stats[i].setVisible(true);
+		}
+	}
 	public void updateImageHand(){
 		Image[] cards = new Image[5];
 		for(int i = 0;i<holdArray.length;i++){
