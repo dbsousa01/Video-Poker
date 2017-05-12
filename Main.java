@@ -1,5 +1,11 @@
 package group18;
 
+/**
+ * @authors Nuno Espada, nº 72774; António Almeida, nº 78494; Daniel Sousa, nº 79129
+ * 
+ * Main class of the program, it receives the users's arguments when the program is called
+ * and based on the args, it calls the respective class main method.
+ */
 public class Main{
 
 	public static void main(String[] args) {
@@ -29,10 +35,8 @@ public class Main{
 		}
 		
 		game.runner(args, score);
+		
 		/************************************
-		 * ??(TO BE DISCUSSED WITH GROUP.	*
-		 * Particularly statistics)			*
-		 * 									*
 		 * Possible states of the game:		*
 		 * 0 - You haven't bet yet.			*
 		 * 	   possible plays:				*

@@ -15,7 +15,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.SpringLayout;
-
+/**
+ * Class that extends the abstract class GameMode.
+ * It implements a GUI using the Swing library, based on a Spring layout. It mimics
+ * the interactive mode but with a user friendly GUI.
+ * All images should be placed in the src folder of the java program in the directory
+ *  /Cards/...png
+ */
 
 public class UiMode extends GameMode{
 	//Macros
@@ -56,6 +62,13 @@ public class UiMode extends GameMode{
 	
 	String betString;
 	
+	/**
+	 * Constructor of the class. Creates an initial panel where the player can place
+	 * its initial credit leading him to the main panel where the rest of the game is placed.
+	 * Initiates every kind of auxiliary array used by the class and places all the
+	 * buttons meant to be used by the player and the cards which represent the player's
+	 * hand. Before dealing, all cards are faced laying down.
+	 */
 	public UiMode(String[] args){
 		super(args);
 		
@@ -85,7 +98,7 @@ public class UiMode extends GameMode{
 	
 	public void placeInitial(){
 		JButton playButton = new JButton("Play");
-		
+		//Creates a frame titled Video Poker
 		Fframe = new JFrame("Video Poker");
 		Fframe.setVisible(false);
 		Fframe.setSize(350,200);
@@ -95,7 +108,8 @@ public class UiMode extends GameMode{
 		JPanel panel_start = new JPanel();
 		Fframe.add(panel_start);
 		Fframe.setLayout(null);
-		
+		//A label Credit and a text box following it, where the player writes the
+		//credit he wishes to start with.
 		creditLabel = new JLabel("Credit:");
 		creditLabel.setBounds(30, 20, 40, 25);
 		Fframe.add(creditLabel);
@@ -107,6 +121,7 @@ public class UiMode extends GameMode{
         playButton.setBounds(100, 60, 80, 25);
         Fframe.add(playButton);
 		
+        //places the button which leads to the beginning of the game.
         playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event){
 				textCredit = credit_text.getText().trim();
@@ -127,6 +142,9 @@ public class UiMode extends GameMode{
 		});
 	}
 	
+	/**
+	 * Method that places the main Frame and adds all that is needed to play a normal game.
+	 */
 	public void placeMain(){
 		layout = new SpringLayout();
 		Container contentPane;
@@ -141,6 +159,7 @@ public class UiMode extends GameMode{
 		contentPane.setLayout(layout);
 		credit_disp = new JTextField(String.valueOf(credit));
 		credit_disp.setEditable(false);
+		//A displayer with the player's credit
 		creditLabel = new JLabel("Credit: ");
 		contentPane.add(creditLabel);
 		layout.putConstraint(SpringLayout.WEST,creditLabel,730,SpringLayout.WEST,contentPane);
@@ -150,6 +169,7 @@ public class UiMode extends GameMode{
 		layout.putConstraint(SpringLayout.WEST,credit_disp,10,SpringLayout.EAST,creditLabel);
 		layout.putConstraint(SpringLayout.NORTH,credit_disp,20,SpringLayout.NORTH,contentPane);
 		
+		//A text box where the result of a hand is printed.
 		result = new JTextField("This will print the player's result. Did he lose? Did he win?");
 		result.setEditable(false);
 		result.setVisible(false);
@@ -160,6 +180,12 @@ public class UiMode extends GameMode{
 		
 	}
 	
+	/**
+	 * Method that places the cards on the panel and its respective hold toggle buttons.
+	 * Initially all cards are loaded up facing backwards and then its images 
+	 * are updated depending on the drawn cards.
+	 * @param cards Array that represents all 5 cards of the player's hand.
+	 */
 	public void setCards(JLabel[] cards){
 		Container cardContainer = mainFrame.getContentPane();
 		int i;
@@ -200,6 +226,10 @@ public class UiMode extends GameMode{
 		}
 	}
 	
+	/**
+	 * Method that places all the main Buttons for the player to use, The button bet,
+	 * deal, hold, advice.
+	 */
 	public void placeButtons(){
 		mainButtons = new JButton[4];
 		Container buttonContainer = mainFrame.getContentPane();
@@ -233,8 +263,14 @@ public class UiMode extends GameMode{
 		mainButtons[i].setEnabled(false);
 	}
 	
+	/**
+	 * Method that sets what each button is meant to do when pressed. E.g: 
+	 * when the bet button is pressed, what is in the bet box is read and that value
+	 * is betted.
+	 * @param score is used to update the game's score after a hold command.
+	 */
 	public void setButtons(Score score){
-		mainButtons[0].addActionListener(new ActionListener(){ //bet button
+		mainButtons[0].addActionListener(new ActionListener(){ //Bet button
 			 public void actionPerformed(ActionEvent event){
 				 if(credit == 0){
 					 System.out.println("Play has no credit");
@@ -251,7 +287,7 @@ public class UiMode extends GameMode{
 					adviceText.setText("");
 				}
 			});
-		mainButtons[1].addActionListener(new ActionListener() {
+		mainButtons[1].addActionListener(new ActionListener() { //Hold button
 			public void actionPerformed(ActionEvent event){
 				String hold = new String("h");
 				for(int i =0;i<holdArray.length;i++){
@@ -278,7 +314,7 @@ public class UiMode extends GameMode{
 			}
 		});
 		
-		mainButtons[2].addActionListener(new ActionListener() {
+		mainButtons[2].addActionListener(new ActionListener(){ //Deal button
 			public void actionPerformed(ActionEvent event){
 				createDeck();
 				if(state == 0 && score.getPlays() != 0){
@@ -299,12 +335,17 @@ public class UiMode extends GameMode{
 				state = 2;
 			}
 		});
-		mainButtons[3].addActionListener(new ActionListener() { //stats button
+		mainButtons[3].addActionListener(new ActionListener() { //Advice button
 			public void actionPerformed(ActionEvent event){
 				adviceText.setText("player should "+sortString(Advice.getAdvice(hand)));
 			}
 		});
 	}
+	
+	/**
+	 * Method that updates the table statistics based on what has been played so far.
+	 * @param score used to access the string result that has the table score.
+	 */
 	public void updateStats(Score score){
 		String[] resultText = new String[13];
 		score.printStats(Integer.parseInt(textCredit), credit);
@@ -318,10 +359,14 @@ public class UiMode extends GameMode{
 			stats[i].setVisible(true);
 		}
 	}
+	/*
+	 * Method that updates the player's card image. 
+	 */
 	public void updateImageHand(){
 		Image[] cards = new Image[5];
 		for(int i = 0;i<holdArray.length;i++){
 			try{
+				//concatenates the player's hand in order to load up the right image
 				cards[i] = ImageIO.read(getClass().getResource("/Cards/"+
 			Card.suits[hand.cards[i].getSuit()]+
 			Card.values[hand.cards[i].getValue()]+".png"));
@@ -333,10 +378,17 @@ public class UiMode extends GameMode{
 		}
 	}
 	
+	/**
+	 * Method that updates the player's credit.
+	 */
 	public void updateCredit(){
 		credit_disp.setText(String.valueOf(credit));
 	}
 	
+	/**
+	 * method that runs the class. Used to read the credit input of the user and call all
+	 * other methods.
+	 */
 	public void runner(String[] args, Score score){
 		Fframe.setVisible(true);
 		if(state == 0){

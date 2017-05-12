@@ -1,8 +1,12 @@
 package group18;
 
-
 import java.util.Arrays;
-
+/**
+ * Class that represents a player's hand. It has two arrays of type hand, both with size 5.
+ * One array is the actual hand of the player and the other is the potentially discard
+ * hand if the player wishes to do so. This is done to ensure that if the player discards
+ * any card, the following ones will be different.
+ */
 public class Hand {
 	
 	//Class variables
@@ -10,7 +14,12 @@ public class Hand {
 	Card[] replacement;
 	int handSize;
 	
-	
+	/**
+	 * Constructor of the class. Fills the array hand and the possible discard array with
+	 * random cards, all different from each other.
+	 * @param deck where the 10 cards are drawn from.
+	 * @param size the size of the arrays, 5 in this case.
+	 */
 	public Hand(Deck deck, int size){
 		this.handSize = size;
 		this.cards = new Card[handSize];
@@ -22,15 +31,29 @@ public class Hand {
 		}
 	}
 	
+	/**
+	 * Getter that returns all the cards of the player's hand
+	 * @return the array of the player's hand
+	 */
 	public Card[] getCards(){
 		return this.cards;
 	}
 	
+	/**
+	 * Getter that gets a card from the player's hand on a specific index
+	 * @param i index of the card
+	 * @return the card
+	 */
 	public Card getCardAt(int i){
 		return this.cards[i];
 	}
 	
-	
+	/**
+	 * Checks if a card is in the player's hand
+	 * @param card card that needs to be searched through the player's hand
+	 * @return if the card is in the player's hand the method returns the index of the card
+	 * (+1), else it returns 0.
+	 */
 	public int isInHand(Card card){
 		for(int i = 0; i < this.length(); i++){
 			if(card.equalsValue(this.getCardAt(i)) && card.equalsSuit(this.getCardAt(i))){
@@ -50,10 +73,19 @@ public class Hand {
 		return aux;
 	}
 	
+	/**
+	 * Getter
+	 * @return the size of the player's hand.
+	 */
 	public int length(){
 		return handSize;
 	}
 	
+	/**
+	 * Method that replaces a card from the player's hand with the replacement
+	 * array.
+	 * @param index of the card that needs to be switched.
+	 */
 	public void replace(int index){
 		if(index > handSize){
 			System.out.println("Card out of range. The hand only has " + handSize);
@@ -62,6 +94,11 @@ public class Hand {
 		}
 	}
 	
+	/**
+	 * Method that replaces a card from the player's hand with a specific card.
+	 * @param index of the card that needs to be switched.
+	 * @param card that you want to replace the old one with in the array.
+	 */
 	public void replace(int index, Card card){
 		if(index > handSize){
 			System.out.println("Card out of range. The hand only has " + handSize);
@@ -70,11 +107,18 @@ public class Hand {
 		}
 	}
 	
+	/**
+	 * Sorts the player's hand, used for a simpler analysis of the hand.
+	 */
 	public void sort(){
 		Arrays.sort(this.cards);
 	}
 	
-	public boolean compareSuit(){ //Function that checks if the cards in hand are all the same suit
+	/**
+	 * Method that checks if all the cards in hand are all from the same suit
+	 * @return true if they are, else false.
+	 */
+	public boolean compareSuit(){
 		for(int i=1; i<this.length(); i++){
 			if(!(this.cards[0].equalsSuit(this.cards[i])))
 				return false;
@@ -82,16 +126,20 @@ public class Hand {
 		return true;
 	}
 	
-	
-	//opt chooses what kind of straight it will check, 0 for royal and straight; 1 for flush and straight
-	//this is done for efficiency
+	/**
+	 * Method that checks if the player has any kind of straight in his hand.
+	 * @param opt Chooses which straight is to be checked. 0 for a royal straight, 1 for
+	 * a flush followed by a simple straight check.
+	 * @return an integer that represents the value of the player's hand, being the
+	 * highest the most important and the lowest the least important.
+	 */
 	public int checkStraight(int opt){ 
 		
 		boolean flush = this.compareSuit();
 		//Royal Flush: same suit, A K Q J 10
 		int[] royal = new int[]{Card.ACE,Card.TEN,Card.JACK,Card.QUEEN,Card.KING};
 		
-		//all values of a deck
+		//all values of a deck to check for a sequence.
 		int[] deck = new int[]{Card.ACE,Card.DEUCE,Card.THREE,Card.FOUR,Card.FIVE,Card.SIX,Card.SEVEN,Card.EIGHT,Card.NINE,Card.TEN,Card.JACK,Card.QUEEN,Card.KING};
 		int value=0;
 		int i,j;
@@ -149,6 +197,12 @@ public class Hand {
 		return 0;
 	}
 	
+	/**
+	 * Method that checks if the hand has any type of a Four of a kind or a triple.
+	 * @param opt that let's it chose if we are checking for a four of a kind or a triple,
+	 * used for efficiency.
+	 * @return an int value that represents the value of the hand as previously described.
+	 */
 	public int checkOcurrence(int opt){
 		Integer i;
 		Integer counter=1;
@@ -184,7 +238,10 @@ public class Hand {
 		return 0;
 	}
 	
-	
+	/**
+	 * Method that checks if there is a Full House on the player's hand.
+	 * @return int value that represents the value of the hand as described.
+	 */
 	public int isFullHouse(){
 		int i;
 		
@@ -206,6 +263,10 @@ public class Hand {
 		return 0;
 	}
 	
+	/**
+	 *Method that checks if there is any kind of a pair in a hand.
+	 * @return the value of the player's hand.
+	 */
 	public int isNPair(){
 		Integer counter=0;
 		Integer value = 0;
@@ -225,7 +286,11 @@ public class Hand {
 		return 0;
 	}
 	
-	
+	/**
+	 * Method that Calls other methods to check if the player's hand as any of the
+	 * poker combinations
+	 * @return the value that represents the type of the player's hand.
+	 */
 	public int isCombination(){ //Giant function, checks if the player's hand is worth something
 		int value = 0;
 		
@@ -250,6 +315,11 @@ public class Hand {
 		return 0;
 	}
 	
+	/**
+	 * Method that overwrites the current hand with a new one of your choice.
+	 * @param vals array of the value of the cards .
+	 * @param suits array of the suits of the cards.
+	 */
 	public void rigHand(int[] vals, int[] suits){
 		for(int i =0; i< handSize;i++){
 			this.cards[i] = new Card(vals[i], suits[i]);
@@ -257,6 +327,10 @@ public class Hand {
 		return;
 	}
 	
+	/**
+	 * Method that resets a card array, filling the array with null objects.
+	 * @param aux_cards Array that needs to be reseted.
+	 */
 	public static void resetCards(Card[] aux_cards){
 		for(int i = 0; i < aux_cards.length; i++){
 			aux_cards[i] = null;

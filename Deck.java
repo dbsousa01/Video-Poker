@@ -28,7 +28,6 @@ public class Deck {
 		}
 	}
 	
-	
 	/**
 	 * Method that shuffles the deck based on two random numbers that
 	 * get a random position of the vector deck and change the position.

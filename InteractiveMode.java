@@ -1,11 +1,21 @@
 package group18;
 
+/**
+ * Class that implements the Interactive game mode, it is an extension of the abstract 
+ * class GameMode.
+ */
 public class InteractiveMode extends GameMode {
 
 	InteractiveMode(String[] args){
 		super(args);
 	}
 	
+	/**
+	 *Main method of the class, it checks the user inputs and compares them to the actual
+	 *state, depending on the input and the current state, a transition between states is
+	 *allowed or not. e.g: the user cannot deal or hold any cards if he has not made a
+	 *bet yet. 3 different states are taken into consideration.
+	 */
 	public void runner(String[] args, Score score){
 		//The program is a cycle that only ends when the player quits. ??Maybe also end when the player has no credits left.
 				while(state != hasQuit){
