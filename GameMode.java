@@ -35,7 +35,6 @@ public abstract class GameMode {
 	int state = 0;
 	String[] userInput;
 	
-	
 	Scanner reader = new Scanner(System.in);
 	
 	GameMode(String[] args){

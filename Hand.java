@@ -256,4 +256,10 @@ public class Hand {
 		}
 		return;
 	}
+	
+	public static void resetCards(Card[] aux_cards){
+		for(int i = 0; i < aux_cards.length; i++){
+			aux_cards[i] = null;
+		}
+	}
 }
