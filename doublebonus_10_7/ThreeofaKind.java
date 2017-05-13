@@ -3,8 +3,15 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
+/**
+ * Class that refers to having three cards of the same value in hand.
+ */
 public class ThreeofaKind{
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string. If no card is found, returns null.
+	 */
 	public static String getStrategy(Hand hand) {
 		
 		
@@ -20,7 +27,6 @@ public class ThreeofaKind{
 		//Start by sorting the aux_hand
 		aux_hand.sort();
 		
-		//5. Three of a kind (except aces)
 		aux_cards[0] = aux_hand.getCardAt(0);
 		counter = 1;
 		

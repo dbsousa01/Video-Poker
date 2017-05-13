@@ -3,9 +3,15 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
-
+/**
+ * Class that refers to having three cards of a royal flush in hand.
+ */
 public class ThreetoRoyalFlush{
 	
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string. If no card is found, returns null.
+	 */
 	public static String getStrategy(Hand hand) {
 		//Creating an auxiliary hand with the same cards as the hand
 		Hand aux_hand = new Hand(hand.length());
@@ -18,7 +24,6 @@ public class ThreetoRoyalFlush{
 		//Start by sorting the aux_hand
 		aux_hand.sort();
 		
-		//10. 3 to a royal flush
 		for(int j = 0; j < aux_hand.length() - 2; j++){
 			counter = 0;
 			if(aux_hand.getCardAt(j).getValue() == Card.ACE || aux_hand.getCardAt(j).getValue() >= Card.TEN){

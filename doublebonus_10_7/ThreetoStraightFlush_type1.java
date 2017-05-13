@@ -3,8 +3,15 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
+/**
+ * Class that refers to having three cards of a straight flush, type 1, in hand.
+ */
 public class ThreetoStraightFlush_type1{
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string. If no card is found, returns null.
+	 */
 	public static String getStrategy(Hand hand) {
 
 		//Auxiliary variables
@@ -22,7 +29,6 @@ public class ThreetoStraightFlush_type1{
 		//Start by sorting the aux_hand
 		aux_hand.sort();
 		
-		//14. 3 to a straight flush (type 1)
 		for(int i = 0; i < aux_hand.length()-2; i++){
 			aux_cards[0] = aux_hand.getCardAt(i);
 			counter = 1;

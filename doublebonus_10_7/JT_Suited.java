@@ -3,6 +3,9 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
+/**
+ * Class that refers to having a jack and a ten of the same suit in hand.
+ */
 public class JT_Suited{
 	
 	public static String getStrategy(Hand hand) {
@@ -18,7 +21,6 @@ public class JT_Suited{
 		//Start by sorting the aux_hand
 		aux_hand.sort();
 		
-		//23. JT suited
 		for(int i = aux_hand.length()-1; i >= 0; i--){
 			if(aux_hand.getCardAt(i).getValue() == Card.JACK){
 				aux_cards[0] = aux_hand.getCardAt(i);

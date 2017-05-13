@@ -3,8 +3,15 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
+/**
+ * Class that refers to having four cards to make a royal flush in hand.
+ */
 public class FourtoRoyalFlush{
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string.
+	 */
 	public static String getStrategy(Hand hand) {
 				
 		//Creating an auxiliary hand with the same cards as the hand
@@ -15,11 +22,9 @@ public class FourtoRoyalFlush{
 		int counter = 0;
 		String s = "";
 		
-		
 		//Start by sorting the aux_hand
 		aux_hand.sort();
 
-		//2. 4 to a royal flush
 		for(int i = 0; i < 2; i++){ //if the first 2 cards aren't valid, we don't have 4 to a R.F.
 			Hand.resetCards(aux_cards);
 			if(counter == 0){

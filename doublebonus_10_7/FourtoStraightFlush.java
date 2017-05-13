@@ -3,8 +3,15 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
+/**
+ * Class that refers to having four cards to make a straight flush in hand.
+ */
 public class FourtoStraightFlush{
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string. If no card is found, returns null.
+	 */
 	public static String getStrategy(Hand hand) {
 		//Creating an auxiliary hand with the same cards as the hand
 		Hand aux_hand = new Hand(hand.length());
@@ -18,7 +25,6 @@ public class FourtoStraightFlush{
 		//Start by sorting the aux_hand
 		aux_hand.sort();
 		
-		//6. 4 to a straight flush
 		for(int j = 0; j < 2; j++){
 			Hand.resetCards(aux_cards);
 			counter = 0;

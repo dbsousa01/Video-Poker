@@ -3,8 +3,15 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
+/**
+ * Class that refers to having two high cards of the same suit in hand.
+ */
 public class TwoSuitedHighCards{
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string. If no card is found, returns null.
+	 */
 	public static String getStrategy(Hand hand) {
 		
 		//Creating an auxiliary hand with the same cards as the hand
@@ -19,7 +26,6 @@ public class TwoSuitedHighCards{
 		//Start by sorting the aux_hand
 		aux_hand.sort();
 		
-		//18. 2 suited high cards
 		for(int i = 0; i < aux_hand.length(); i++){
 			if(aux_hand.getCardAt(i).getValue() == Card.ACE || aux_hand.getCardAt(i).getValue() >= Card.JACK){
 				if(counter == 0){

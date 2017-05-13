@@ -2,8 +2,15 @@ package doublebonus_10_7;
 
 import group18.Hand;
 
+/**
+ * Class that refers to having four cards with the same value in hand.
+ */
 public class FourofaKind {
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string.
+	 */
 	public static String getStrategy(Hand hand) {
 
 		//Creating an auxiliary hand with the same cards as the hand
@@ -17,8 +24,8 @@ public class FourofaKind {
 		//If the player has a Straight Flush, tell him to hold all cards
 		if(result == 10){
 			return "1 2 3 4 5";
-		}else{
-			return null;
 		}
+		
+		return null;
 	}
 }

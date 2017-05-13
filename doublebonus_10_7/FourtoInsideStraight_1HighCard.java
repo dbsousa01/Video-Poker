@@ -3,8 +3,15 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
+/**
+ * Class that refers to having four cards to an inside Straight and one high card in hand.
+ */
 public class FourtoInsideStraight_1HighCard{
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string.
+	 */
 	public static String getStrategy(Hand hand) {
 
 		//Auxiliary variables
@@ -22,7 +29,6 @@ public class FourtoInsideStraight_1HighCard{
 		//Start by sorting the aux_hand
 		aux_hand.sort();
 		
-		//21. 4 to an inside straight with 1 high card
 		for(int i = 0; i < aux_hand.length()-3; i++){
 			Hand.resetCards(aux_cards);
 			aux_cards[0] = aux_hand.getCardAt(i);
@@ -31,34 +37,34 @@ public class FourtoInsideStraight_1HighCard{
 				if(aux_hand.getCardAt(j).getValue() <= aux_cards[0].getValue() + 4){
 					aux_cards[counter] = aux_hand.getCardAt(j);
 					counter++;
+					
+					if(counter == 3 && aux_hand.getCardAt(i).getValue() >= Card.TEN && aux_hand.getCardAt(0).getValue() == Card.ACE){
+						aux_cards[counter] = aux_hand.getCardAt(0);
+						counter++;
+					}
+					
+					if(counter == 4){
+						aux_count = 0;
+						for(int k = 0; k < counter; k++){
+							if(aux_cards[k].getValue() >= Card.JACK || aux_cards[k].getValue() == Card.ACE){
+								aux_count++;
+							}
+							
+							int a = hand.isInHand(aux_cards[k]);
+							
+							if(a != 0){
+								s += a + " ";
+							}
+						}
+						
+						if(aux_count == 1){
+							return s;
+						}
+						
+						s = "";
+					}
 				}else{
 					break;
-				}
-			}
-			
-			if(counter == 3 && aux_hand.getCardAt(i).getValue() >= Card.TEN && aux_hand.getCardAt(0).getValue() == Card.ACE){
-				aux_cards[counter] = aux_hand.getCardAt(0);
-				counter++;
-			}
-			
-			if(counter == 4){
-				aux_count = 0;
-				for(int j = 0; j < counter; j++){
-					if(aux_cards[j].getValue() >= Card.JACK || aux_cards[j].getValue() == Card.ACE){
-						aux_count++;
-					}
-					
-					int a = hand.isInHand(aux_cards[j]);
-					
-					if(a != 0){
-						s += a + " ";
-					}
-				}
-				
-				if(aux_count == 1){
-					return s;
-				}else{
-					s = "";
 				}
 			}
 		}

@@ -2,9 +2,15 @@ package doublebonus_10_7;
 
 import group18.Hand;
 
-
+/**
+ * Class that refers to having a royal flush in hand.
+ */
 public class RoyalFlush{
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string. If no card is found, returns null.
+	 */
 	public static String getStrategy(Hand hand) {
 
 		//Creating an auxiliary hand with the same cards as the hand

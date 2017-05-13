@@ -3,8 +3,15 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
+/**
+ * Class that refers to having three cards to a flush, including two high cards, in hand.
+ */
 public class ThreetoFlush_2HighCards{
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string. If no card is found, returns null.
+	 */
 	public static String getStrategy(Hand hand) {
 
 		//Auxiliary variables
@@ -20,7 +27,6 @@ public class ThreetoFlush_2HighCards{
 		//Start by sorting the aux_hand
 		aux_hand.sort();
 		
-		//17. 3 to a flush with 2 high cards
 		for(int j = 0; j < 3; j++){ //if the 1st 3 cards fail, we can no longer have 3 cards of the same suit
 			aux_cards[0] = aux_hand.getCardAt(j);
 			counter = 1;

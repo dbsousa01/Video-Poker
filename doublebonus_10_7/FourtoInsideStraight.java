@@ -3,8 +3,15 @@ package doublebonus_10_7;
 import group18.Hand;
 import group18.Card;
 
+/**
+ * Class that refers to having four card to an inside Straight and one high card in hand.
+ */
 public class FourtoInsideStraight{
 
+	/**
+	 * @param hand
+	 * @return indices of the intended cards in the hand, in the form of a string.
+	 */
 	public static String getStrategy(Hand hand) {
 		
 		//Creating an auxiliary hand with the same cards as the hand
@@ -28,20 +35,19 @@ public class FourtoInsideStraight{
 				if(aux_hand.getCardAt(j).getValue() <= aux_cards[0].getValue() + 4){
 					aux_cards[counter] = aux_hand.getCardAt(j);
 					counter++;
+					if(counter == 4){
+						for(j = 0; j < counter; j++){
+							int a = hand.isInHand(aux_cards[j]);
+							
+							if(a != 0){
+								s += a + " ";
+							}
+						}
+						return s;
+					}
 				}else{
 					break;
 				}
-			}
-			
-			if(counter == 4){
-				for(int j = 0; j < counter; j++){
-					int a = hand.isInHand(aux_cards[j]);
-					
-					if(a != 0){
-						s += a + " ";
-					}
-				}
-				return s;
 			}
 		}
 		return null;
