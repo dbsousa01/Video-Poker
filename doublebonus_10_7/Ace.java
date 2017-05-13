@@ -10,10 +10,9 @@ public class Ace{
 		for(int i = 0; i < hand.length(); i++){
 			if(hand.getCardAt(i).getValue() == Card.ACE){
 				int a = i + 1;
-				return a + "";
+				return String.valueOf(a);
 			}
 		}
-		
 		return null;
 	}
 

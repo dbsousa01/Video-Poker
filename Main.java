@@ -12,7 +12,6 @@ public class Main{
 	
 		//Class variables
 		GameMode game = null;
-		Score score = new Score();
 		
 		//Reading the arguments to see if the program was initialized correctly
 		//Initializing the credit variable with the amount requested by the player
@@ -26,15 +25,14 @@ public class Main{
 			}else if(args[0].equals("-g")){
 				game = new UiMode(args);
 			}
+			game.runner(args);
 		}else{
 			System.out.println("Not enough arguments. Usage -mode arguments. Can be:");
-			System.out.println("-i [credits] -> interactive");
-			System.out.println("-d [files.txt]    -> debug");
-			System.out.println("-s           -> simulation");
+			System.out.println("-i [credits]   -> interactive");
+			System.out.println("-d [files.txt] -> debug");
+			System.out.println("-s             -> simulation");
 			System.exit(-1);;
 		}
-		
-		game.runner(args, score);
 		
 		/************************************
 		 * Possible states of the game:		*

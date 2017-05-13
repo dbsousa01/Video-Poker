@@ -24,18 +24,16 @@ public abstract class GameMode {
 	int previousBet = maxBet;
 	int[] toDiscard;
 	int toHold;
-	Deck deck;
-	Hand hand;
+	private int credit = 0;
+	Scanner reader = new Scanner(System.in);
 	
 	//Variables
-	Integer bet = maxBet;
+	Player player;
+	int bet = maxBet;
 	char input;
 	String type_hand = null;
-	Integer credit=0;
 	int state = 0;
 	String[] userInput;
-	
-	Scanner reader = new Scanner(System.in);
 	
 	/**
 	 * Constructor that takes the input argument and the credit.
@@ -43,41 +41,27 @@ public abstract class GameMode {
 	 */
 	GameMode(String[] args){
 		if(args[0].equals("-g") && args.length <=1){ //UIMode
+			player = new Player(credit);
 			return;
 		}
 		else if(args.length < 2){
 			System.out.println("Not enough arguments");
 			System.exit(0);
-		}
-		try{
-			credit = Integer.parseInt(args[1]);
-			if(credit == 0 || credit < 0){
-				System.out.println("Error: Credit");
-				System.exit(0);
+		
+		}else{
+			try{
+				credit = Integer.parseInt(args[1]);
+				if(credit == 0 || credit < 0){
+					System.out.println("Error: Credit");
+					System.exit(0);
+				}
+			}catch(NumberFormatException ex){
+				System.out.println("Wrong input, exiting");
+				System.exit(1);
 			}
-		}catch(NumberFormatException ex){
-			System.out.println("Wrong input, exiting");
-			System.exit(1);
 		}
 		
-		createDeck();
-	}
-	
-	/**
-	 * creates a newly Deck. Used ever since a new deck is needed after a normal play.
-	 */
-	public void createDeck(){
-		deck = new Deck();
-		deck.shuffle();
-		
-		hand = new Hand(deck, handSize);
-	}
-	
-	/**
-	 * Prints the current player's credit
-	 */
-	public void Show_credit(){
-		System.out.println("player's credit is " + credit);
+		player = new Player(credit);
 	}
 	
 	/**
@@ -85,16 +69,17 @@ public abstract class GameMode {
 	 * @param amount. Integer that represents the amount of a bet a player wants to make.
 	 */
 	public void bet(int amount){
-		if(bet <= credit){
-			previousBet = bet;
-		}else if(credit.equals(0)){
+		if(player.getCredit() == 0){
 			System.out.println("player ran out of credit");
+			System.exit(0);
+		}else if(bet <= player.getCredit()){
+			previousBet = bet;
 		}else{
 			System.out.println("Not enough credits. Going ALL IN!");
-			bet = credit;
+			bet = player.getCredit();
 		}
 		
-		credit -= bet;
+		player.takeCredit(bet);
 		System.out.println("player is betting " + bet);
 	}
 	
@@ -115,6 +100,7 @@ public abstract class GameMode {
 					System.out.println("Not a valid number");
 					return;
 				}
+				
 				if(bet < 1 || bet > 5){
 					System.out.println(userInput[0] + " Illegal amount.");
 					bet = previousBet;
@@ -124,23 +110,20 @@ public abstract class GameMode {
 			bet(bet);
 			
 			state = 1;
-		}else{
-			System.out.println("b: illegal command.");
 		}
 	}
 	
 	/**
-	 * Method that checks which cards does the player want to keep in his hand and
-	 * discards the rest with new cards. Finally it calls a method that checks the 
+	 * Method that checks which cards the player wants to keep in his hand and
+	 * replaces the rest with new cards. Finally, it calls a method that checks the 
 	 * player's hand to see if the final hand has won anything.
 	 * @param score Class that implements the score of the game, checks if the hand is a
 	 * winning hand and increments the credit if it is the case.
 	 * @param handi Current player's hand, to be compared with the Discard Array to see
 	 * which cards should be switched and which ones should be kept in the hand.
 	 */
-	public void hold(Score score, Hand handi){
-		Deck deck = new Deck();
-		Hand sorted = new Hand(deck, handi.length());
+	public void hold(Hand handi){
+		
 		if(state == 2){
 			//Creating the toDiscard array that will be used for the "hold" function
 			toDiscard = new int[handi.length()];
@@ -175,26 +158,17 @@ public abstract class GameMode {
 				handi.replace(i);
 			}
 		}
-		//hand.sort();
-
 		System.out.println("player's hand " + handi);
-		//hand.rigHand(new int[]{10, 11, 12, 9, 0}, new int[]{0, 0, 0, 0, 0});
 		
-		//Creates a local hand so it can be sorted and compared to the various possible
-		//hands. A local variable is used to ensure that the original hand is not sorted
-		//since in a normal game, the hand would not be sorted.
-		sorted.rigHand(new int[]{handi.getCardAt(0).getValue() ,  handi.getCardAt(1).getValue(), handi.getCardAt(2).getValue(), handi.getCardAt(3).getValue(), handi.getCardAt(4).getValue()}, new int[]{handi.getCardAt(0).getSuit() ,  handi.getCardAt(1).getSuit(), handi.getCardAt(2).getSuit(), handi.getCardAt(3).getSuit(), handi.getCardAt(4).getSuit()});
-		
-		sorted.sort();
 		//Checks if the player has won anything with his hand.
-		credit = score.result(sorted, bet, credit);
+		player.setCredit(player.evaluateHand(bet));
 		
 		state = 0;
 	}
 	
 	/**
 	 * Method that sorts an integer string, from the lowest number to the highest number.
-	 * @param s String that needs to be sorted.
+	 * @param s: String that needs to be sorted.
 	 * @return the same parameter string s but now sorted.
 	 */
 	public String sortString(String s){
@@ -205,16 +179,16 @@ public abstract class GameMode {
 		}
 		array = s.split("\\s+");
 		Arrays.sort(array,1,array.length);
+		array[0] = "hold cards";
 		s = String.join(" ",array);
 		return s;
 	}
 	
 	/**
-	 * Abstract method that means to be implemented in the child classes.
+	 * Abstract method meant to be implemented in the child classes.
 	 * @param args
-	 * @param score
 	 */
-	public void runner(String[] args, Score score){
+	public void runner(String[] args){
 	
 	}
 }

@@ -126,8 +126,9 @@ public class UiMode extends GameMode{
 			public void actionPerformed(ActionEvent event){
 				textCredit = credit_text.getText().trim();
 				try{
-					credit = Integer.parseInt(textCredit);
-					if(credit.equals(0) || credit < 0){
+					player.setCredit(Integer.parseInt(textCredit));
+					player = new Player(Integer.parseInt(textCredit));
+					if(player.getCredit() <= 0){
 						System.out.println("Credit is invalid.");
 						return;
 					}
@@ -157,7 +158,7 @@ public class UiMode extends GameMode{
 		
 		contentPane = mainFrame.getContentPane();
 		contentPane.setLayout(layout);
-		credit_disp = new JTextField(String.valueOf(credit));
+		credit_disp = new JTextField(String.valueOf(player.getCredit()));
 		credit_disp.setEditable(false);
 		//A displayer with the player's credit
 		creditLabel = new JLabel("Credit: ");
@@ -269,22 +270,25 @@ public class UiMode extends GameMode{
 	 * is betted.
 	 * @param score is used to update the game's score after a hold command.
 	 */
-	public void setButtons(Score score){
+	public void setButtons(Player score){
 		mainButtons[0].addActionListener(new ActionListener(){ //Bet button
 			 public void actionPerformed(ActionEvent event){
-				 if(credit == 0){
-					 System.out.println("Play has no credit");
+				 if(player.getCredit() == 0){
+					 System.out.println("Player has no credit");
 					 System.exit(0);
 				 }
-				 	betString = "b "+bet_text.getText();
-				 	userInput = betString.trim().split("\\s+");
-					bet();
-					updateCredit();
-					result.setVisible(false);
-					mainButtons[0].setEnabled(false);
-					bet_text.setEnabled(false);
-					mainButtons[2].setEnabled(true);
-					adviceText.setText("");
+			 	betString = "b "+bet_text.getText();
+			 	userInput = betString.trim().split("\\s+");
+				bet();
+				updateCredit();
+				if(player.getCredit()<0){
+					mainFrame.setVisible(false);
+				}
+				result.setVisible(false);
+				mainButtons[0].setEnabled(false);
+				bet_text.setEnabled(false);
+				mainButtons[2].setEnabled(true);
+				adviceText.setText("");
 				}
 			});
 		mainButtons[1].addActionListener(new ActionListener() { //Hold button
@@ -299,25 +303,25 @@ public class UiMode extends GameMode{
 				}
 				System.out.println(hold);
 				userInput = hold.trim().split("\\s+");
-				hold(score,hand);
+				hold(player.getHand());
 				mainButtons[3].setEnabled(false);
 				updateCredit();
 				updateImageHand();
-				result.setText(score.output);
+				result.setText(score.getOutput());
 				result.setVisible(true);
 				mainButtons[1].setEnabled(false);
 				mainButtons[0].setEnabled(true);
 				mainButtons[2].setEnabled(true);
 				adviceText.setText("");
 				bet_text.setEnabled(true);
-				updateStats(score);
+				updateStats();
 			}
 		});
 		
 		mainButtons[2].addActionListener(new ActionListener(){ //Deal button
 			public void actionPerformed(ActionEvent event){
-				createDeck();
-				if(state == 0 && score.getPlays() != 0){
+				player.createHand();
+				if(state == 0 && score.nbPlays() != 0){
 					mainButtons[0].setEnabled(false);
 					bet_text.setEnabled(false);;
 					bet(previousBet);
@@ -326,7 +330,7 @@ public class UiMode extends GameMode{
 					adviceText.setText("");
 					state = 1;
 				}
-				System.out.println("player's hand: " + hand);
+				System.out.println("player's hand: " + player.getHand());
 				
 				updateImageHand();
 				mainButtons[1].setEnabled(true);
@@ -337,7 +341,7 @@ public class UiMode extends GameMode{
 		});
 		mainButtons[3].addActionListener(new ActionListener() { //Advice button
 			public void actionPerformed(ActionEvent event){
-				adviceText.setText("player should "+sortString(Advice.getAdvice(hand)));
+				adviceText.setText("player should "+sortString(player.getAdvice()));
 			}
 		});
 	}
@@ -346,14 +350,14 @@ public class UiMode extends GameMode{
 	 * Method that updates the table statistics based on what has been played so far.
 	 * @param score used to access the string result that has the table score.
 	 */
-	public void updateStats(Score score){
+	public void updateStats(){
 		String[] resultText = new String[13];
-		score.printStats(Integer.parseInt(textCredit), credit);
+		player.showScore();
 		
 		for(int i= 0;i<resultText.length;i++){
 			resultText[i] = new String();
 		}
-		resultText = score.resultGUI.split(",");
+		resultText = player.player_score.resultGUI.split(",");
 		for(int i= 0;i<resultText.length;i++){
 			stats[i].setText(resultText[i]);
 			stats[i].setVisible(true);
@@ -368,8 +372,8 @@ public class UiMode extends GameMode{
 			try{
 				//concatenates the player's hand in order to load up the right image
 				cards[i] = ImageIO.read(getClass().getResource("/Cards/"+
-			Card.suits[hand.cards[i].getSuit()]+
-			Card.values[hand.cards[i].getValue()]+".png"));
+			Card.suits[player.getHand().getCardAt(i).getSuit()]+
+			Card.values[player.getHand().getCardAt(i).getValue()]+".png"));
 			}catch(IOException e){
 				e.printStackTrace();
 			}
@@ -382,27 +386,25 @@ public class UiMode extends GameMode{
 	 * Method that updates the player's credit.
 	 */
 	public void updateCredit(){
-		credit_disp.setText(String.valueOf(credit));
+		credit_disp.setText(String.valueOf(player.getCredit()));
 	}
 	
 	/**
 	 * method that runs the class. Used to read the credit input of the user and call all
 	 * other methods.
 	 */
-	public void runner(String[] args, Score score){
+	public void runner(String[] args){
 		Fframe.setVisible(true);
 		if(state == 0){
-			deck = new Deck();
-			deck.shuffle();
-			hand = new Hand(deck, handSize);
+			player.createHand();
 		}
-		while(credit.equals(0)){ //Waits for the user's valid input
+		while(player.getCredit() == 0){ //Waits for the user's valid input
 			try {
 				Thread.sleep(100);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
-		setButtons(score);
+		setButtons(player);
 	}
 }

@@ -24,7 +24,7 @@ public class Score {
 	 */
 	public void printStats(int iniCredit, int credit){
 		
-		//Used only in the GUI mode. used because of identation.
+		//Used only in the GUI mode. used because of indentation.
 		resultGUI = "  Hand                        nb,  Jacks or better        "+stats[0]
 				+",  Two pairs                 "+stats[1]
 				+",  Three of a kind        "+stats[2]

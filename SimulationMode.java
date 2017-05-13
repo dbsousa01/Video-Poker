@@ -1,46 +1,58 @@
 package group18;
 
 import java.util.Arrays;
-
+/**
+ * Class that extends the abstract class GameMode. It plays the game alone, trying always to 
+ * make the best possible choice in order to achieve the best return. It only ends if
+ * the number of deals chosen by the user are met or if the player runs out of credit to
+ * continue betting.
+ */
 public class SimulationMode extends GameMode{
-	int bet;
 	int nbdeals;
-
-	public SimulationMode(String[] args) {
-		// TODO Auto-generated constructor stub
-		super(args);
-	}
 	
-	public void runner(String[] args, Score score){
+	/**
+	 * Constructor of the class, it checks if the arguments provided by the user are valid.
+	 * @param args
+	 */
+	public SimulationMode(String[] args) {
+		super(args);
 		//Checking if simulation mode was called properly and starting it if true.
 		if(args.length < 4){
 			System.out.println("Error: incorrect number of arguments. Usage -s credit bet nbdeals");
 			System.exit(1);
 		}
-		System.out.println("You chose the simulation mode");
 		
 		try{
 			bet = Integer.parseInt(args[2]);
+			if(bet < 1 || bet > 5){
+				System.out.println("Invalid bet. Please chose a value between 1 and 5.");
+				System.exit(1);
+			}
 			nbdeals = Integer.parseInt(args[3]);
 		}catch(NumberFormatException ex){
 			System.out.println("Wrong input, exiting");
 			System.exit(1);
 		}
-		
-		//Finally all verifications of args are done. Initializing variables
+	}
+	/**
+	 * Main method of the class. It bets every time the value chosen by the user, deals
+	 * and always asks for the advice and chooses every time whatever the advice tells it
+	 * to do
+	 */
+	public void runner(String[] args){
 		//Variables
 		String str;
-		toDiscard = new int[hand.length()];
-		int i = 0;
+		toDiscard = new int[player.getHand().length()];
 		
-		for(i = 0; i < nbdeals; i++){
-			if(credit > 0){
-				deck = new Deck();
-				deck.shuffle();
-				hand = new Hand(deck, handSize);
-				
+		for(int i = 0; i < nbdeals; i++){
+			
+			if(player.getCredit() > 0){ // checks if there is enough credit
+				player.createHand();
+				System.out.println(player.getHand());
 				bet(bet);
-				str = Advice.getAdvice(hand);
+				str = player.getAdvice();
+				
+				Arrays.fill(toDiscard, 1);
 				
 				for(String aux_str: str.split(" ")){
 					if(!(aux_str.equals("h")) && aux_str != (null)){
@@ -49,25 +61,21 @@ public class SimulationMode extends GameMode{
 					}
 				}
 				
-				Arrays.fill(toDiscard, 1);
-				
 				for(int j = 0; j < toDiscard.length; j++){
 					if(toDiscard[j] == 1){
-						hand.replace(toDiscard[j]);
+						player.getHand().replace(toDiscard[j]);
 					}
 				}
 				
-				hand.sort();
-				
-				credit = score.result(hand, bet, credit);
+				player.getHand().sort();
+				player.setCredit(player.evaluateHand(bet));
 				
 			}else{
-				score.printStats(Integer.parseInt(args[1]), credit);
 				System.out.println("You ran out of credits");
-				return;
+				break;
 			}
 		}
 
-		score.printStats(Integer.parseInt(args[1]), credit);
+		player.showScore();
 	}
 }

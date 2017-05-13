@@ -32,6 +32,22 @@ public class Hand {
 	}
 	
 	/**
+	 * Constructor of the class.
+	 * Creates two arrays of null cards with the correct hand size.
+	 * @param size the size of the arrays, 5 in this case.
+	 */
+	public Hand(int size){
+		this.handSize = size;
+		this.cards = new Card[size];
+		this.replacement = new Card[size];
+		
+		for(int i = 0; i < handSize; i++){
+			this.cards[i] = null;
+			this.replacement[i] = null;
+		}
+	}
+	
+	/**
 	 * Getter that returns all the cards of the player's hand
 	 * @return the array of the player's hand
 	 */
@@ -182,6 +198,10 @@ public class Hand {
 						break;
 				}
 				for(j=0;j<this.length();j++){//Compares the ordered hand with the ordered deck to check for a seq
+					if(i==13){
+						value = 0;
+						break;
+					}
 					if(!(this.cards[j].getValue()==deck[i])){
 						value = 0; //not a sequence
 						break;
@@ -328,8 +348,24 @@ public class Hand {
 	}
 	
 	/**
+	 * Method that overwrites the current hand with a new one of your choice.
+	 * @param array of cards to be used as hand
+	 */
+	public void rigHand(Card[] new_cards){
+		if(new_cards.length > this.handSize){
+			System.out.println("You can't use hands of that size. Choose an array with " + this.handSize + " cards.");
+			return;
+		}
+		
+		for(int i =0; i< handSize;i++){
+			this.cards[i] = new Card(new_cards[i].getValue(), new_cards[i].getSuit());
+		}
+		return;
+	}
+	
+	/**
 	 * Method that resets a card array, filling the array with null objects.
-	 * @param aux_cards Array that needs to be reseted.
+	 * @param aux_cards Array that needs to be reset.
 	 */
 	public static void resetCards(Card[] aux_cards){
 		for(int i = 0; i < aux_cards.length; i++){

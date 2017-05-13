@@ -16,27 +16,19 @@ public class InteractiveMode extends GameMode {
 	 *allowed or not. e.g: the user cannot deal or hold any cards if he has not made a
 	 *bet yet. 3 different states are taken into consideration.
 	 */
-	public void runner(String[] args, Score score){
+	public void runner(String[] args){
 		//The program is a cycle that only ends when the player quits. ??Maybe also end when the player has no credits left.
 				while(state != hasQuit){
 					
-					if(credit == 0 && state == 0){
+					if(player.getCredit() == 0 && state == 0){
 						System.out.println("Player has no credit");
-						//score.printStats(Integer.parseInt(args[1]), credit);
+						//player.showScore();
 						break;
-					}
-					
-					if(state == 0){
-						//For each new play, we need to open a new deck
-						//Then we need to shuffle the deck
-						//now we create the initial player's hand and the 5 replacement cards,
-						//that will be used to replace the cards chosen by the player.
-						createDeck();
 					}
 					
 					userInput = reader.nextLine().toLowerCase().trim().split("\\s+");
 					
-					//Then we take the first word
+					//The first letter of the input should be the command to perform
 					if(userInput[0].length() == 1){
 						input = userInput[0].charAt(0);
 					}else{
@@ -51,17 +43,20 @@ public class InteractiveMode extends GameMode {
 						break;
 						
 					case '$':
-						Show_credit();
+						System.out.println("player's credit is " + player.getCredit());
 						break;
 						
 					case 'd':
-						if(state == 0 && score.getPlays() != 0){
+						if(state == 0 && player.nbPlays() != 0){
 							bet(previousBet);
 							state = 1;
 						}
 						
 						if(state == 1){
-							System.out.println("player's hand: " + hand);
+							//For each new deal, we need to create a new hand for the player.
+							//The new hand should come from a newly opened deck, to ensure card randomness.
+							player.createHand();
+							System.out.println("player's hand: " + player.getHand());
 							state = 2;
 						}else{
 							System.out.println("d: illegal command");
@@ -69,24 +64,24 @@ public class InteractiveMode extends GameMode {
 						break;
 						
 					case 'h':
-						hold(score,hand);
+						hold(player.getHand());
 						break;
 						
 					case 'a':
 						if(state == 2){
-							System.out.println("player should "+sortString(Advice.getAdvice(hand)));
+							System.out.println("player should " + sortString(player.getAdvice()));
 						}else{
 							System.out.println("a: Illegal command");
 						}
 						break;
 					case 's':
-						score.printStats(Integer.parseInt(args[1]), credit);
+						player.showScore();
 						break;
 						
 					case 'q':
 						if(state == 0){
 							state = hasQuit;
-							//score.printStats(Integer.parseInt(args[1]), credit);
+							//player.showScore();
 							System.out.println("Thank you for playing!");
 						}else{
 							System.out.println(userInput[0] + ": Illegal command");
@@ -95,7 +90,7 @@ public class InteractiveMode extends GameMode {
 						break;
 						
 					default:
-						System.out.println(input +": illegal command.");
+						System.out.println(input + ": illegal command.");
 					}
 				}
 	}

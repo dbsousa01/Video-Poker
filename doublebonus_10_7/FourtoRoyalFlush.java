@@ -27,13 +27,26 @@ public class FourtoRoyalFlush{
 					aux_cards[counter] = aux_hand.getCardAt(i);
 					counter++;
 					
-					for(int j = i; j < aux_hand.length(); j++){//keep searching the hand
+					for(int j = i+1; j < aux_hand.length(); j++){//keep searching the hand
 						if(aux_hand.getCardAt(j).getValue() >= Card.TEN){
 							//NOTE: even if the first card wasn't an ace, the rest won't possibly be, since aux_hand is sorted.
 							//if it's a valid value && valid suit
 							if(aux_hand.getCardAt(j).equalsSuit(aux_cards[0])){
 								aux_cards[counter] = aux_hand.getCardAt(j);
 								counter++;
+
+								if(counter == 4){
+									for(i = 0; i < counter; i++){
+										if(aux_cards[i] != null){
+											int a = hand.isInHand(aux_cards[i]);
+										
+											if(a != 0){
+												s += a + " ";
+											}
+										}
+									}
+									return s;
+								}
 							}
 						}
 					}
@@ -41,16 +54,6 @@ public class FourtoRoyalFlush{
 			}
 		}
 		
-		if(counter == 4){
-			for(int i = 0; i < counter; i++){
-				int a = hand.isInHand(aux_cards[i]);
-				
-				if(a != 0){
-					s += a + " ";
-				}
-			}
-			return s;
-		}
 		return null;
 		
 		

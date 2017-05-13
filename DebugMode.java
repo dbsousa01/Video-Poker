@@ -86,7 +86,7 @@ public class DebugMode extends GameMode{
 			holdList[i]=0;
 		}
 	}
-	public void runner(String[] args, Score score){
+	public void runner(String[] args){
 		/**
 		 * 	Both lists are iterated and its content is used 
 		 * to play a normal game.
@@ -109,7 +109,7 @@ public class DebugMode extends GameMode{
 		String holdhands = new String();
 		
 		while(itr.hasNext()){ //Parses through the linked list of plays
-			if(credit == 0){
+			if(player.getCredit() == 0){
 				System.out.println("Player has no credit");
 				System.exit(0);
 			}
@@ -133,7 +133,7 @@ public class DebugMode extends GameMode{
 					System.out.println("\n-cmd b");
 					itr.previous(); //goes back on the list
 				}
-				if(credit < bet){ //If the credit on startup is not enough, program exits
+				if(player.getCredit() < bet){ //If the credit on startup is not enough, program exits
 					System.out.println("Oops. Something went wrong. You can bet in the file but have no funds to do it. Load more credit");
 					System.exit(1);
 				}
@@ -174,7 +174,7 @@ public class DebugMode extends GameMode{
 				for(i =0;i<holdList.length;i++){
 					if(holdList[i].equals(0)){
 						try{
-							hand.replace(i,card_itr.next()); //replaces the hand with the card on the card file
+							player.getHand().replace(i,card_itr.next()); //replaces the hand with the card on the card file
 						}catch(IndexOutOfBoundsException e){ //Card list is empty
 							System.out.println("Something went terribly wrong!");
 							System.exit(-1);
@@ -184,14 +184,14 @@ public class DebugMode extends GameMode{
 						}
 					}
 				}
-				System.out.println("player's hand " + hand);
-				hand.sort();
-				credit = score.result(hand, bet, credit);
+				System.out.println("player's hand " + player.getHand());
+				player.getHand().sort();
+				player.setCredit(player.evaluateHand(bet));
 				betted = 0;
 				break;
 			case "d":
 				System.out.println("\n-cmd d");
-				if(state == 0 && score.getPlays() != 0){ //if there is no bet previously
+				if(state == 0 && player.nbPlays() != 0){ //if there is no bet previously
 					bet(previousBet);
 					state = 1;
 				}else if(state != 1){
@@ -203,14 +203,14 @@ public class DebugMode extends GameMode{
 					card_itr.previous();//has to go back to get the suit as well
 					suits[i]= card_itr.next().getSuit();
 				}
-				hand.rigHand(vals, suits); //Creates a hand with the cards wanted
-				System.out.println("player's hand " + hand);
+				player.getHand().rigHand(vals, suits); //Creates a hand with the cards wanted
+				System.out.println("player's hand " + player.getHand());
 				dealt = 1;
 				state = 2;
 				break;
 			case "$":
 				System.out.println("\n-cmd $");
-				Show_credit();
+				System.out.println("player's credit is " + player.getCredit());
 				break;
 			case "a":
 				System.out.println("\n-cmd a");
@@ -219,11 +219,11 @@ public class DebugMode extends GameMode{
 					break;
 				}
 				//Prints the advice
-				System.out.println("player should "+sortString(Advice.getAdvice(hand)));
+				System.out.println("player should " + sortString(player.getAdvice()));
 				break;
 			case "s":
 				System.out.println("\n-cmd s");
-				score.printStats(Integer.parseInt(args[1]), credit);
+				player.showScore();
 				break;
 			case "q":
 				System.out.println("\n-cmd q");
