@@ -48,7 +48,6 @@ public class SimulationMode extends GameMode{
 			
 			if(player.getCredit() > 0){ // checks if there is enough credit
 				player.createHand();
-				System.out.println(player.getHand());
 				bet(bet);
 				str = player.getAdvice();
 				
@@ -71,7 +70,7 @@ public class SimulationMode extends GameMode{
 				player.setCredit(player.evaluateHand(bet));
 				
 			}else{
-				System.out.println("You ran out of credits");
+				System.out.println("You ran out of credit");
 				break;
 			}
 		}

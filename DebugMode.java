@@ -138,6 +138,9 @@ public class DebugMode extends GameMode{
 					System.exit(1);
 				}
 				bet(bet);
+				if(allIn != null)
+					System.out.println(allIn);
+				System.out.println(betText);
 				betted = 1;
 				state = 1;
 				break;
@@ -187,6 +190,7 @@ public class DebugMode extends GameMode{
 				System.out.println("player's hand " + player.getHand());
 				player.getHand().sort();
 				player.setCredit(player.evaluateHand(bet));
+				System.out.println(player.printOutput());
 				betted = 0;
 				break;
 			case "d":

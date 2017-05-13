@@ -301,7 +301,6 @@ public class UiMode extends GameMode{
 					}
 					holdArray[i].setEnabled(false);
 				}
-				System.out.println(hold);
 				userInput = hold.trim().split("\\s+");
 				hold(player.getHand());
 				mainButtons[3].setEnabled(false);
@@ -330,7 +329,6 @@ public class UiMode extends GameMode{
 					adviceText.setText("");
 					state = 1;
 				}
-				System.out.println("player's hand: " + player.getHand());
 				
 				updateImageHand();
 				mainButtons[1].setEnabled(true);
@@ -352,7 +350,7 @@ public class UiMode extends GameMode{
 	 */
 	public void updateStats(){
 		String[] resultText = new String[13];
-		player.showScore();
+		player.getResultGUI();
 		
 		for(int i= 0;i<resultText.length;i++){
 			resultText[i] = new String();

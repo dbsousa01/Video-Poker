@@ -35,6 +35,10 @@ public abstract class GameMode {
 	int state = 0;
 	String[] userInput;
 	
+	String betText;
+	String allIn;
+	String holdText;
+	
 	/**
 	 * Constructor that takes the input argument and the credit.
 	 * @param 
@@ -75,12 +79,12 @@ public abstract class GameMode {
 		}else if(bet <= player.getCredit()){
 			previousBet = bet;
 		}else{
-			System.out.println("Not enough credits. Going ALL IN!");
+			allIn = "Not enough credits. Going ALL IN!";
 			bet = player.getCredit();
 		}
 		
 		player.takeCredit(bet);
-		System.out.println("player is betting " + bet);
+		betText = "player is betting " + bet;
 	}
 	
 	/**
@@ -158,7 +162,7 @@ public abstract class GameMode {
 				handi.replace(i);
 			}
 		}
-		System.out.println("player's hand " + handi);
+		holdText = "player's hand " + handi;
 		
 		//Checks if the player has won anything with his hand.
 		player.setCredit(player.evaluateHand(bet));

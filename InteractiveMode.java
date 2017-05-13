@@ -40,6 +40,10 @@ public class InteractiveMode extends GameMode {
 					switch(input){
 					case 'b':
 						bet();
+						if(allIn != null){
+							System.out.println(allIn);
+						}
+						System.out.println(betText);
 						break;
 						
 					case '$':
@@ -65,6 +69,8 @@ public class InteractiveMode extends GameMode {
 						
 					case 'h':
 						hold(player.getHand());
+						System.out.println(holdText);
+						System.out.println(player.printOutput());
 						break;
 						
 					case 'a':

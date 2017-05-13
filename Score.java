@@ -14,17 +14,18 @@ public class Score {
 	//{Jacks or better, Two pairs, Three of a kind, Straight, Flush, Full house, 4 of a kind, Straight flush, Royal flush, other}
 	int[] stats = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}; 
 	int plays = 0;
-	String output;
+	String outputGUI;
 	String resultGUI;
+	String outputText;
+	String resultText;
 	
 	/**
-	 * Method that prints the statistics of the player so far.
+	 * Method that fills a string with the statistics of the game, only used for the GUI
+	 * implementation.
 	 * @param iniCredit The amount of credit that the player has started with.
 	 * @param credit The current player's credit.
 	 */
-	public void printStats(int iniCredit, int credit){
-		
-		//Used only in the GUI mode. used because of indentation.
+	public void getResult(int iniCredit, int credit){
 		resultGUI = "  Hand                        nb,  Jacks or better        "+stats[0]
 				+",  Two pairs                 "+stats[1]
 				+",  Three of a kind        "+stats[2]
@@ -39,7 +40,15 @@ public class Score {
 				+",  Total                           "+plays
 				+",   Credit                    "+credit+" "
 				+"  ("+((credit*100)/iniCredit) + "%)";
+	}
+	/**
+	 * Method that prints the statistics of the player so far.
+	 * @param iniCredit The amount of credit that the player has started with.
+	 * @param credit The current player's credit.
+	 */
+	public void printStats(int iniCredit, int credit){
 		
+		//Used only in the GUI mode. used because of indentation.
 		System.out.println("\nHand            nb");
 		System.out.println("______________________");
 		System.out.println("\nJacks or better  " + stats[0]);
@@ -259,12 +268,12 @@ public class Score {
 			
 		default:
 			stats[9]++;
-			output = "player loses";
-			System.out.println("player loses and your credit is " + credit + ".");
+			outputGUI = "player loses";
+			outputText = "player loses and his credit is " + credit + ".";
 			return credit;
 		}
-		output = "player wins with a "+type_hand;
-		System.out.println("player wins with a " + type_hand + " and now his credit is " + credit + "!");
+		outputGUI = "player wins with a "+type_hand;
+		outputText = "player wins with a " + type_hand + " and now his credit is " + credit + "!";
 		return credit;
 	}
 }
