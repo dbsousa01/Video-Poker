@@ -1,12 +1,17 @@
 package group18;
 
+/**
+ * @authors Nuno Espada, nº 72774; António Almeida, nº 78494; Daniel Sousa, nº 79129
+ * 
+ * Main class of the program, it receives the users's arguments when the program is called
+ * and based on the args, it calls the respective class main method.
+ */
 public class Main{
 
 	public static void main(String[] args) {
 	
 		//Class variables
 		GameMode game = null;
-		Score score = new Score();
 		
 		//Reading the arguments to see if the program was initialized correctly
 		//Initializing the credit variable with the amount requested by the player
@@ -20,19 +25,16 @@ public class Main{
 			}else if(args[0].equals("-g")){
 				game = new UiMode(args);
 			}
+			game.runner(args);
 		}else{
 			System.out.println("Not enough arguments. Usage -mode arguments. Can be:");
-			System.out.println("-i [credits] -> interactive");
-			System.out.println("-d [files.txt]    -> debug");
-			System.out.println("-s           -> simulation");
+			System.out.println("-i [credits]   -> interactive");
+			System.out.println("-d [files.txt] -> debug");
+			System.out.println("-s             -> simulation");
 			System.exit(-1);;
 		}
 		
-		game.runner(args, score);
 		/************************************
-		 * ??(TO BE DISCUSSED WITH GROUP.	*
-		 * Particularly statistics)			*
-		 * 									*
 		 * Possible states of the game:		*
 		 * 0 - You haven't bet yet.			*
 		 * 	   possible plays:				*

@@ -28,7 +28,6 @@ public class Deck {
 		}
 	}
 	
-	
 	/**
 	 * Method that shuffles the deck based on two random numbers that
 	 * get a random position of the vector deck and change the position.
@@ -42,7 +41,7 @@ public class Deck {
 		Card temp;
 		
 		//shuffle the deck by switching the place of 2 random cards 1000 times
-		for(int i = 0; i < numCards*suitAmount*100; i++){
+		for(int i = 0; i < numCards*suitAmount*1000; i++){
 			pos1 = rand1.nextInt(numCards*suitAmount);
 			pos2 = rand2.nextInt(numCards*suitAmount);
 			
